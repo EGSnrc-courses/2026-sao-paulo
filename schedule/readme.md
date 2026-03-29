@@ -95,7 +95,7 @@
 
 |    Time | Topic           | Title                                                   | Instructor |
 | ------: | :-------------  | :------------------------------------------------------ | :--------- |
-| `14:30` | 💬 `Lecture 28` | Advanced variance reduction techniques in `egs_chamber` | Frédéric   |
+| `14:30` | 💬 `Lecture 28` | Verifying simulations with the Fano test                | Frédéric   |
 | `15:00` | 💬 `Lecture 31` | FLURZnrc, SPRRZnrc and g                                | Ernesto    |
 | `16:00` | ☕ `Break`      |                                                         |            |
 | `16:30` | 🔬 `Lab 9`      | Build an ionization chamber model in egs++              | Frédéric   |
