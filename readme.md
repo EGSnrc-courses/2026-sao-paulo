@@ -10,7 +10,7 @@ This is a live repository providing the EGSnrc course content: schedule, lecture
 ## Copyright
 
 All material in this repository is copyright © National Research Council Canada
-or © Dave W. O. Rogers.
+or the author of each file for non-NRC authors.
 
 ## Licence
 
