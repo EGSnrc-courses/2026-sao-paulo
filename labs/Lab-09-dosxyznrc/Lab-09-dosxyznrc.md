@@ -33,13 +33,14 @@ Run `dosxyznrc` with 10000 histories to start with. However, if the uncertainty
 is not to your satisfaction, run more histories using the `restart` feature
 under the `Run option` simulation parameter.
 
-For analysis, we will be using the `statdose` application. This simple
-application reads `*.3ddose` files and can be used to generate plots, perform
-normalization, and other functions.
+For analysis, we will be using the [Voxel Interactive Contour Tool for Online Radiation Intensity Analytics](https://web.uvic.ca/~bazalova/VICTORIA/) web viewer (`VICTORIA`). This web application is a tool for the 
+visualization and comparison of dose distributions using EGSnrc file types `.egsphant` and `.3ddose` from the 
+EGSnrc toolkit, patients who want a simple tool to view files,or researchers using DICOM Computed Tomography (CT) 
+and DICOM Radiotherapy (RT) Dose files in low- or middle-income countries without access to treatment planning systems. 
 
 ### Questions
 
-- Plot a profile using `statdose` to confirm the beam direction and size.
+- Plot a profile using `VICTORIA` to confirm the beam direction and size.
 
 - In [section 9.3](#93-coordinate-transformation-script) we provide a small
   python script to convert the DICOM gantry, couch, collimator angles into the
@@ -57,7 +58,7 @@ normalization, and other functions.
 - Change to source 1, and use the `theta`, `phi` and `phicol` outputs from the
   transform to set the beam direction. Set the $\large x$, $\large y$, and
   $\large z$ isocentre coordinates to 0, 0, and 2.5, respectively. Plot a
-  profile using `statdose` to determine the beam direction in DOSXYZnrc
+  profile using `VICTORIA` to determine the beam direction in DOSXYZnrc
   coordinates.
 
 - Change the source to use the phase-space file from the 10 MeV example, i.e.,
@@ -79,7 +80,7 @@ normalization, and other functions.
   2 cm. The $\large z$ thicknesses can be 0. Set the medium of the region
   outside the phantom to `H2O700ICRU` — notice that we have created an identical
   phantom, but reduced the number of voxels. Compare the central axis depth-dose
-  to the dose obtained in the previous exercise, and the calculation times for
+  to the dose obtained in the previous exercise using `VICTORIA`, and the calculation times for
   the two simulations.
 
    **Bonus Question:** If the phase space source was restarted, in which
