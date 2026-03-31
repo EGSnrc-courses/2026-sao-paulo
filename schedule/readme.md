@@ -42,7 +42,7 @@
 |    Time | Topic           | Title                                                   | Instructor |
 | ------: | :------------   | :------------------------------------------------------ | :--------- |
 | `9:00`  | 💬 `Lecture 14` | BEAMnrc introduction and main inputs                    | Frédéric   |
-| `10:00` | 💬 `Lecture 11` | Phase space file analysis with `beamdp`                 | Reid       | [//]: # (Originally 1hr)
+| `10:00` | 💬 `Lecture 10` | Phase-space files                                       | Frédéric   | [//]: # (Originally 1hr)
 | `10:30` | ☕ `Break`      |                                                         |            |
 | `11:00` | 🔬 `Lab 6`      | Run BEAMnrc simulations                                 | Reid       |
 | `12:30` | 🥪 `Lunch`      |                                                         |            |
@@ -52,7 +52,7 @@
 |    Time | Topic           | Title                                                   | Instructor |
 | ------: | :------------   | :------------------------------------------------------ | :--------- |
 | `14:30` | 💬 `Lecture 17` | DOSXYZnrc dose calculation in a phantom                 | Ernesto    |
-| `15:30` | 🖥 `Lab 8`      | Create your own BEAMnrc accelerator                     | Frédéric   | [//]: # (Compress to mini-lab?)
+| `15:30` | 🖥 `Lecture 11` | Phase-space file analysis with `beamdp`                 | Reid       | [//]: # (Compress to mini-lab?)
 | `16:00` | ☕ `Break`      |                                                         |            |
 | `16:30` | 🖥 `Lab 9`      | Calculate dose in a phantom with DOSXYZnrc              | Ernesto    |
 | `18:00` | 🛑              |                                                         |            |
@@ -95,7 +95,7 @@
 
 |    Time | Topic           | Title                                                   | Instructor |
 | ------: | :-------------  | :------------------------------------------------------ | :--------- |
-| `14:30` | 💬 `Lecture 28` | Verifying simulations with the Fano test                | Frédéric   |
+| `14:30` | 💬 `Lecture 28` | Advanced variance reduction techniques in `egs_chamber` | Frédéric   |
 | `15:00` | 💬 `Lecture 31` | FLURZnrc, SPRRZnrc and g                                | Ernesto    |
 | `16:00` | ☕ `Break`      |                                                         |            |
 | `16:30` | 🔬 `Lab 9`      | Build an ionization chamber model in egs++              | Frédéric   |
