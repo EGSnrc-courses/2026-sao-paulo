@@ -1,0 +1,107 @@
+:start run control:
+  ncase = 100000
+:stop run control:
+
+:start geometry definition:
+
+  :start geometry:
+     library = egs_cylinders
+     type = EGS_ZCylinders
+     name = the_cylinder
+     midpoint = 0 0 0
+     radii = 5
+  :stop geometry:
+  :start geometry :
+     library = egs_planes
+     type = EGS_Zplanes
+     name = the_planes
+     positions = 0 10
+  :stop geometry:
+  :start geometry:
+     library = egs_ndgeometry
+     name = phantom
+     dimensions = the_planes the_cylinder
+     :start media input:
+        media = H2O521ICRU
+     :stop media input:
+  :stop geometry:
+
+:start geometry:
+  library = egs_box
+  box size = 500 500 500
+  name = air_box
+  :start media input:
+   media = AIR521ICRU
+  :stop media input:
+:stop geometry:
+
+:start geometry:
+  library = egs_genvelope
+  name = phantom_in_air
+  base geometry = air_box
+  inscribed geometries = phantom
+:stop geometry:
+  
+  simulation geometry = phantom_in_air
+  
+:stop geometry definition:
+
+:start source definition:
+
+  :start source:
+     library = egs_point_source
+     name = the_point_source
+     position = 0, 0, -100
+     :start spectrum:
+       type = monoenergetic
+       energy = 0.1
+     :stop spectrum:
+     charge = 0
+  :stop source:
+
+  :start source:
+     library = egs_collimated_source
+     name = my_collimated_source
+     distance = 100
+     :start source shape:
+       type = point
+       position = 0 0 -100
+     :stop source shape:
+     :start target shape:
+       library = egs_circle
+       radius = 5
+     :stop target shape:
+     :start spectrum:
+       type = monoenergetic
+       energy = 0.1
+     :stop spectrum:
+     charge = 0
+  :stop source:  
+  
+  simulation source = my_collimated_source
+  
+:stop source definition:
+
+:start ausgab object definition:
+
+  #:start ausgab object:
+     library = egs_dose_scoring
+     volume = 785.398163397 # in cm ^3
+     region dose = yes
+     name = lab7_dose_scoring
+  #:stop ausgab object:
+  :start ausgab object:
+     library = egs_track_scoring
+     name = tracker
+     score electrons =  no
+     score positrons =  no
+     score photons = yes
+     # start scoring =  0 # default is 0
+     # stop scoring =  1024 # default is 1024
+     # buffer size =  1024  # default is 1024
+  :stop ausgab object:
+
+  
+:stop ausgab object definition:
+
+

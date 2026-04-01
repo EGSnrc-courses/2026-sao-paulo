@@ -1,0 +1,162 @@
+################################################################################
+### Geometry
+################################################################################
+
+:start geometry definition:
+
+    #---------------------------------------------------------------------------
+    # chamber mesh
+    #---------------------------------------------------------------------------
+    :start geometry:
+        name = chamber_mesh
+        library = egs_mesh
+        file = a12-1.5M.msh
+    :stop geometry:
+
+    #---------------------------------------------------------------------------
+    # water box
+    #---------------------------------------------------------------------------
+    :start geometry:
+        name = water_box
+        library = egs_box
+        box size = 10
+        :start media input:
+            media = water
+        :stop media input:
+    :stop geometry:
+
+    #---------------------------------------------------------------------------
+    # chamber in the water box
+    #---------------------------------------------------------------------------
+    :start geometry:
+        name = chamber_in_water
+        library = egs_genvelope
+        base geometry = water_box
+        inscribed geometries = chamber_mesh
+    :stop geometry:
+
+    #---------------------------------------------------------------------------
+    # simulation geometry
+    #---------------------------------------------------------------------------
+    simulation geometry = chamber_in_water
+
+:stop geometry definition:
+
+################################################################################
+### Media
+################################################################################
+:start media definition:
+    ae = 0.521
+    ap = 0.01
+    ue = 50.511
+    up = 50
+
+    :start air:
+        density correction file = air_dry_nearsealevel
+    :stop air:
+
+    :start c552:
+        density correction file = c-552air-equivalentplastic
+    :stop c552:
+
+    :start water:
+        density correction file = water_liquid
+    :stop water:
+
+:stop media definition:
+
+################################################################################
+### Source
+################################################################################
+:start source definition:
+
+    :start source:
+        name = photons
+        library = egs_collimated_source
+        charge = 0
+        :start source shape:
+            type = point
+            position = 0 0 -100
+        :stop source shape:
+        :start target shape:
+            library = egs_rectangle
+            rectangle = -2 -2 2 2
+        :stop target shape:
+        :start spectrum:
+            type = monoenergetic
+            energy = 10
+        :stop spectrum:
+
+    :stop source:
+
+    simulation source = photons
+
+:stop source definition:
+
+################################################################################
+### MC transport parameters
+################################################################################
+:start MC transport parameter:
+    Global Ecut = 0.521
+    Global Pcut = 0.010
+:stop MC transport parameter:
+
+################################################################################
+### Run control
+################################################################################
+:start run control:
+    ncase = 1e6
+:stop run control:
+
+################################################################################
+### Ausgab objects
+################################################################################
+:start ausgab object definition:
+
+    :start ausgab object:
+        name = doseScoring
+        library = egs_dose_scoring
+        medium dose = yes
+        region dose = no
+    :stop ausgab object:
+
+:stop ausgab object definition:
+
+################################################################################
+### Expected results
+################################################################################
+# Finished simulation
+#
+# Total cpu time for this run:            56.99 (sec.) 0.0158(hours)
+# Histories per hour:                     6.3169e+07
+# Number of random numbers used:          814646929
+# Number of electron CH steps:            4.07061e+07
+# Number of all electron steps:           5.27093e+07
+#
+#
+#  last case = 1000000 Etot = 15993.6
+#
+# ======================================================
+# Dose Scoring Object(doseScoring)
+# ======================================================
+# => last case = 1000000 fluence = 1e+06
+#
+#
+# ==> Summary of media dosimetry (per particle)
+# medium         Edep/[MeV]              D/[Gy]
+# ---------------------------------------------------------
+# c552   1.4142e-05 +/- 1.326  % 1.7792e-21 +/- 1.326  %
+# air    1.0567e-08 +/- 2.381  % 5.0451e-21 +/- 2.381  %
+# water  1.9748e-03 +/- 0.230  % 3.1636e-13 +/- 0.230  %
+# ---------------------------------------------------------
+#
+# ======================================================
+#
+#
+# ================================================================================
+# Finished simulation
+#
+#   Elapsed time:                   63.4 s (  0.018 h)
+#   CPU time:                       59.9 s (  0.017 h)
+#   Ratio:                          1.058
+# ================================================================================

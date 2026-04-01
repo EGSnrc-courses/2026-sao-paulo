@@ -1,0 +1,125 @@
+################################################################################
+### Geometry
+################################################################################
+:start geometry definition:
+
+    #---------------------------------------------------------------------------
+    # spherical chamber tip
+    #---------------------------------------------------------------------------
+    :start geometry:
+        name     = chamber_tip
+        library  = egs_spheres
+        midpoint = 0.935 0 0
+        radii    = 0.05 0.305 0.355
+        :start media input:
+            media = c552 air
+            set medium = 1 1
+        :stop media input:
+    :stop geometry:
+
+    # simulation geometry = chamber_tip
+
+    #---------------------------------------------------------------------------
+    # main chamber body (as a conestack)
+    #---------------------------------------------------------------------------
+    :start geometry:
+        name    = chamber_body
+        library = egs_cones
+        type    = EGS_ConeStack
+        axis    = 0.985 0 0 -1 0 0     # x-axis
+
+        ### sensitive volume (cylindrical portion)
+        :start layer:
+            thickness    = 2.03
+            top radii    = 0.05 0.305 0.355
+            bottom radii = 0.05 0.305 0.355
+            media        = c552 air c552
+        :stop layer:
+
+        ### electrode base
+        :start layer:
+            thickness    = 0.13
+            top radii    = 0.15 0.305 0.355
+            bottom radii = 0.15 0.305 0.355
+            media        = c552 air c552
+        :stop layer:
+
+        ### up to first kink
+        :start layer:
+            thickness    = 0.11
+            top radii    = 0.355
+            bottom radii = 0.355
+            media        = c552
+        :stop layer:
+
+        ### first widening
+        :start layer:
+            thickness    = 0.08
+            bottom radii = 0.48
+            media        = c552
+        :stop layer:
+
+        ### up to second kink
+        :start layer:
+            thickness    = 0.48
+            bottom radii = 0.48
+            media        = c552
+        :stop layer:
+
+        ### second widening
+        :start layer:
+            thickness    = 0.08
+            bottom radii = 0.61
+            media        = c552
+        :stop layer:
+
+        ### to end
+        :start layer:
+            thickness    = 2.0
+            bottom radii = 0.61
+            media        = c552
+        :stop layer:
+
+    :stop geometry:
+
+    # simulation geometry = chamber_body
+
+    #---------------------------------------------------------------------------
+    # join tip and body in cd geometry
+    #---------------------------------------------------------------------------
+
+    ### planes for cd geometry base
+    :start geometry:
+        name      = cd_planes
+        library   = egs_planes
+        type      = EGS_Xplanes
+        positions = -4 0.935 4
+    :stop geometry:
+
+    ### join tip and body
+    :start geometry:
+        name    = chamber
+        library = egs_cdgeometry
+        base geometry = cd_planes
+        set geometry  = 0 chamber_body
+        set geometry  = 1 chamber_tip
+    :stop geometry:
+
+    #---------------------------------------------------------------------------
+    # simulation geometry
+    #---------------------------------------------------------------------------
+    simulation geometry = chamber
+
+:stop geometry definition:
+
+################################################################################
+### Viewer bounding box
+################################################################################
+:start view control:
+    xmin = -4
+    xmax =  4
+    ymin = -4
+    ymax =  4
+    zmin = -4
+    zmax =  4
+:stop view control:
