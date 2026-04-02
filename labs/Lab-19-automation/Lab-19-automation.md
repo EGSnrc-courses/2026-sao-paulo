@@ -165,5 +165,47 @@ where `-n4` denotes 4 local CPU cores for use. The command to run is contained w
 
 Since we only have 4 input files, this is straightforward to do by hand. If you find yourself generating dozens of input files, consider writing a short python script to automate this.
 
+Here's a very simple python script. Notice the hard-coded input file, number of cores, and application that you might have to change for your own simulations.
+
+```python
+import subprocess
+import glob
+import os
+
+pattern = "Lab-19-methane*.egsinp"
+files = glob.glob(pattern)
+
+if not files:
+    print(f"No files found matching '{pattern}'")
+    exit(1)
+
+for filepath in sorted(files):
+    # Strip the .egsinp extension to get the input name
+    filename = os.path.basename(filepath)
+    input_name = os.path.splitext(filename)[0]
+
+    command = [
+        "egs-parallel",
+        "--batch", "cpu",
+        "-n4",
+        "-v",
+        "--force",
+        "-c", f"egs_phd -i {input_name}"
+    ]
+
+    print(f"Running: {' '.join(command)}")
+    result = subprocess.run(command)
+
+    if result.returncode != 0:
+        print(f"Warning: command exited with code {result.returncode} for {input_name}")
+
+print("All done.")
+```
+
+Save the script as run-sumulation.py in the egs_phd directory, and run it with:
+
+```bash
+python3 run-simulations.py
+```
 
 ### [Solutions laboratory 19](Lab-19-solutions.md)
