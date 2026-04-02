@@ -85,8 +85,7 @@
 
 |    Time | Topic           | Title                                                   | Instructor |
 | ------: | :-------------  | :------------------------------------------------------ | :--------- |
-|  `9:00` | 💬 `Lecture 25` | egs++ applications                                      | Reid       |
-|  `9:30` | 💬 `Lecture 26` | egs++ applications: `egs_chamber`                       | Frédéric   |
+|  `9:00` | 💬 `Lecture 26` | egs++ applications: `egs_chamber`                       | Frédéric   |
 | `10:30` | ☕ `Break`      |                                                         |            |
 | `11:00` | 🖥 `Lab 13`     | Calculate chamber correction factors with `egs_chamber` | Frédéric   |
 | `12:30` | 🥪 `Lunch`      |                                                         |            |
@@ -95,7 +94,7 @@
 
 |    Time | Topic           | Title                                                   | Instructor |
 | ------: | :-------------  | :------------------------------------------------------ | :--------- |
-| `14:30` | 💬 `Lecture 28` | Advanced variance reduction techniques in `egs_chamber` | Frédéric   |
+| `14:30` | 💬 `Lecture 28` | Validating simulations with the Fano test               | Frédéric   |
 | `15:00` | 💬 `Lecture 31` | FLURZnrc, SPRRZnrc and g                                | Ernesto    |
 | `16:00` | ☕ `Break`      |                                                         |            |
 | `16:30` | 🔬 `Lab 9`      | Build an ionization chamber model in egs++              | Frédéric   |

@@ -1,0 +1,299 @@
+#############################################################################
+#
+# Lab to demonstrate dynamic and synchronized geometries and sources
+#
+#############################################################################
+
+
+
+############################################ Geometries
+:start geometry definition:
+
+    ### Rectangular box of water - will be centred at origin
+    ### This represents patient body: x = R/L, y = S/I, z = A/P
+    :start geometry:
+        library  = egs_box
+        name     = empty_body
+        box size = 35 150 20
+        :start media input:
+            media = water
+        :stop media input:
+    :stop geometry:
+
+    ### Model lung as a cylinder - right lung
+    :start geometry:
+        name    = lung_R
+        library = egs_cones
+        type    = EGS_ConeStack
+        axis    = 8 20 0 0 1 0    # starts at (8, 20, 0) and builds up in +y direction
+        :start layer:
+            thickness    = 20
+            top radii    = 7
+            bottom radii = 7
+            media        = water #lung
+        :stop layer:
+    :stop geometry:
+
+    ### Model lung as a cylinder - left lung
+    :start geometry:
+        name    = lung_L
+        library = egs_cones
+        type    = EGS_ConeStack
+        axis    = -8 20 0 0 1 0
+        :start layer:
+            thickness    = 20
+            top radii    = 7
+            bottom radii = 7
+            media        = water #lung
+        :stop layer:
+    :stop geometry:
+            
+    ### Sphere representing a lung tumour (dose will be scored here):
+    :start geometry:
+        name     = tumour
+        library  = egs_spheres
+        midpoint = 8 30 0
+        radii = 2
+        :start media input:
+            media = water
+        :stop media input:
+    :stop geometry:
+
+    ### Put lungs in body
+    :start geometry:
+        library = egs_genvelope
+	name    = body_lungs
+	base geometry = empty_body
+	inscribed geometries = lung_L lung_R
+    :stop geometry:
+
+    ### Put tumour in body + lungs
+    :start geometry:
+        library = egs_genvelope
+	name    = body_noRot_noShift
+	base geometry = body_lungs
+	inscribed geometries = tumour
+    :stop geometry:    
+
+    ### Move body so that lung tumour is centred on isocentre = (0,0,0) 
+    :start geometry:
+        name        = body_noRot
+        library     = egs_gtransformed
+        my geometry = body_noRot_noShift
+        :start transformation:
+            translation = -8 -30 0   # negative of the lung tumour position!
+        :stop transformation:
+    :stop geometry:
+            
+    ### Apply rotations to simulate couch rotations (yaw)
+    :start geometry:
+        name        = body
+        library     = egs_dynamic_geometry
+        my geometry = body_noRot      # name of existing geometry defined above
+        synchronize motion = yes      # so that we can sync with the source!
+        :start motion:
+            # control point = time(1) xtrans(1) ytrans(1) ztrans(1) xrot(1) yrot(1) zrot(1)
+            # units of cm and degrees
+            control point 1 = 0.00 0 0 0 0 0 0
+            control point 2 = 0.25 0 0 0 0 0 0
+            control point 3 = 0.25 0 0 0 0 0 0
+            control point 4 = 0.50 0 0 0 0 0 0
+            control point 5 = 0.50 0 0 0 0 0 0
+            control point 6 = 0.75 0 0 0 0 0 0
+            control point 7 = 0.75 0 0 0 0 0 45      # rotation about the z-axis = couch kick!
+            control point 8 = 1.00 0 0 0 0 0 45
+        :stop motion:
+    :stop geometry:
+
+    ### Rectangular box of air - will be centred at origin
+    :start geometry:
+        library  = egs_box
+        name     = air_box
+        box size = 250
+        :start media input:
+            media = air
+        :stop media input:
+    :stop geometry:
+
+    ### Put patient body in air
+    :start geometry:
+        library = egs_genvelope
+	name    = final
+	base geometry = air_box
+	inscribed geometries = body
+    :stop geometry:    
+
+
+simulation geometry = final
+
+:stop geometry definition:
+
+
+
+########################################### Media:
+:start media definition:
+
+    ae = 0.521
+    ap = 0.010
+    ue = 6.511
+    up = 6
+
+    ### water
+    :start water:
+        # these files are found in: HEN_HOUSE/pegs4/density_corrections/
+        density correction file = water_liquid
+    :stop water:
+
+    ### lung
+    :start lung:
+        density correction file = lung_inflated_icru_1986
+    :stop lung:
+
+    ### air
+    :start air:
+        density correction file = air_dry_nearsealevel
+    :stop air:
+
+
+:stop media definition:
+
+
+
+########################################### The source:
+:start source definition:
+    :start source:
+        name      = my_source_static
+        library   = egs_collimated_source            
+        charge    = 0   # photons
+        
+        ### point source 100 cm away on +z axis, directed in +z direction
+        :start source shape:                   
+            type     = point        
+            position = 0 0 -100
+        :stop source shape:
+
+        ### collimation to 5x5 cm^2 square field at isocentre
+        :start target shape:             
+            library   = egs_rectangle   
+            rectangle = -2.5 -2.5 2.5 2.5
+        :stop target shape:
+        
+        ### 6 MV spectrum
+        :start spectrum:
+            type = tabulated spectrum
+            spectrum file = /Users/patriciaoliver/EGSnrc/HEN_HOUSE/spectra/egsnrc/mohan6.spectrum
+        :stop spectrum:
+    :stop source:
+
+    :start source:
+        library = egs_dynamic_source
+        name = my_source
+        source name = my_source_static     # name of a previously defined source
+        synchronize motion = yes           # sync with geometry!
+        :start motion:
+            # control point = xiso yiso ziso dsource theta phi phicol time
+            # dsource = length of vector from isocentre to source origin (cm).
+            #           With no rotations, +ve dsource is along the -Z axis.
+            # theta = angle of rotation of dsource about the Y-axis (deg).
+            #         +ve values define clockwise rotations. Angle is
+            #         defined relative to the -Z axis.
+            # phi = angle of rotation of dsource about Z-axis (deg).
+            #       +ve values define clockwise rotations. Angle is defined
+            #       relative to the +X-axis.
+            # phicol = angle of rotation of source about -dsource (deg). +ve
+            #          value defines clockwise rotations.
+            # units of cm and degrees
+            # beam centred on tumour, which is at isocentre:
+            control point 1 = 0 0 0 0 0   0 0 0.0
+            control point 2 = 0 0 0 0 0   0 0 0.25
+            control point 3 = 0 0 0 0 90  0 0 0.25
+            control point 4 = 0 0 0 0 90  0 0 0.50
+            control point 5 = 0 0 0 0 180 0 0 0.50
+            control point 6 = 0 0 0 0 180 0 0 0.75
+            control point 7 = 0 0 0 0 90  0 0 0.75
+            control point 8 = 0 0 0 0 90  0 0 1.00
+            # Note: same number of CPs as egs_dynamic_geometry, also same time points 
+                    # --> necessary for synchronization
+        :stop motion:
+    :stop source:
+
+    simulation source = my_source
+
+:stop source definition:
+
+
+               
+############################################ Run control
+:start run control:
+    ncase = 1E7
+:stop run control:
+
+
+            
+############################################ Random numbers
+:start rng definition:
+	initial seeds = 34 171
+:stop rng definition:
+
+            
+
+############################################# Scoring
+:start scoring options:
+    :start calculation geometry:
+	geometry name = final
+	cavity regions = 4
+	cavity mass = 1            # not true but we're doing relative comparisons anyway
+	cavity geometry = tumour   # for range-based Russian Roulette
+    :stop calculation geometry:
+:stop scoring options:
+
+
+                
+############################################# Variance reduction
+:start variance reduction:
+    cs enhancement = 0       # no XCSE here
+    :start range rejection:
+        rejection = 32       # survival probability is one over this
+        Esave     = 0.521    # no range rej but Russian Roulette for E > Esave
+        cavity geometry = tumour             # dummy (see scoring options block above)
+        rejection range medium = water#lung        # should be least dense medium in geom
+    :stop range rejection:
+:stop variance reduction:
+
+
+                 
+############################################# Transport parameters
+:start MC transport parameter:
+    Global Ecut = 0.521        # cutoff energy for electrons, incl. rest mass, in MeV
+    Global Pcut = 0.01         # cutoff energy for photons, in MeV
+:stop MC transport parameter:
+
+
+                     
+############################################ Ausgab objects
+# :start ausgab object definition:
+#    :start ausgab object:
+#        library = egs_track_scoring
+#        include time index = yes          ### IMPORTANT!
+#        stop scoring = 10000
+#    :stop ausgab object:
+# :stop ausgab object definition:
+
+
+## Results
+#  Regular lung: 2.0309e-14 +/- 0.409  % 
+#                43.7 s  ---> efficiency = 1368 1/s
+#                --> 1.6x more efficient due to fewer interactions in lung
+#
+#  Water lung:   1.8130e-14 +/- 0.451  % 
+#                56.4 s  ---> efficiency = 872 1/s
+#  
+#  Water lung has lower tumour dose by ~10% per history due to additional attenuation.
+#  Historical: TPS used water lung. So for a given Rx, dose to tumour higher than planned
+#  E.g., Rx 60 Gy but actually get 66 Gy
+#  Modern TPS: models heterogeneities, so now tumour actually gets Rx. 
+#  To keep consistent with past outcomes, need to increase Rx dose to lung to 66 Gy.
+#
+#
+
+
