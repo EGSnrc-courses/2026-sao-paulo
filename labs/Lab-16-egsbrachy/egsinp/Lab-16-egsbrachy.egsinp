@@ -1,0 +1,175 @@
+##############################################################################
+#
+# 100 LDR seeds in a phantom made of prostate-tissue material
+#
+##############################################################################
+
+#------------------------------------------------------------------------------------
+:start run control:
+    ncase = 2e4 # we will use particle recycling to increase the simulation efficiency
+    # so fewer starting histories are needed to reach the same average statistical
+    # uncertainty
+:stop run control:
+
+
+#------------------------------------------------------------------------------------
+:start run mode:
+    run mode = normal  # interseed effects included!
+:stop run mode:
+
+
+#------------------------------------------------------------------------------------
+:start media definition:
+    AE = 0.512
+    UE = 2.512
+    AP = 0.001
+    UP = 1.500
+
+    material data file = lib/media/material.dat
+:stop media definition:
+
+
+#------------------------------------------------------------------------------------
+:start geometry definition:
+
+    :start geometry:
+        name = box
+        library = egs_glib
+        include file = lib/geometry/phantoms/30cmx30cmx30cm_box_xyz_prostate.geom
+    :stop geometry:
+
+    :start geometry:
+        name = phantom
+        library = egs_glib
+        include file = lib/geometry/phantoms/ptv_3.4cmx2.8cmx3.8cm_2mm_xyz_prostate.geom
+    :stop geometry:
+
+    :start geometry:
+        name = seed
+        library = egs_glib
+        include file = lib/geometry/sources/Pd103_LDR/TheraSeed_200/TheraSeed_200.geom
+    :stop geometry:
+
+    :start geometry:
+        name = phantom_and_seeds
+        library = egs_autoenvelope
+        base geometry = phantom
+
+        :start inscribed geometry:
+            inscribed geometry name = seed
+
+            :start transformations:
+                include file = lib/geometry/transformations/100seeds_grid_5x7mmx4x7mmx5x8mm_0.5mm_perturb_in_z
+            :stop transformations:
+
+            :start region discovery:
+                action = discover
+                density of random points (cm^-3) = 1E8
+                include file = lib/geometry/sources/Pd103_LDR/TheraSeed_200/boundary.shape
+            :stop region discovery:
+        :stop inscribed geometry:
+    :stop geometry:
+
+    :start geometry:
+        name = final
+        library = egs_genvelope
+        base geometry = box
+        inscribed geometries = phantom_and_seeds
+    :stop geometry:
+
+    source geometries = seed
+    phantom geometries = phantom
+    simulation geometry = final
+    # source envelope geometry no longer specified!
+:stop geometry definition:
+
+
+#------------------------------------------------------------------------------------
+:start volume correction:
+
+    # the built-in egs_brachy volume correction for scoring voxels which contain inscribed source geometries
+    :start source volume correction:
+        correction type = correct # other options are 'none' or 'zero dose', which sets the dose to zero in voxels containing source geometries
+        density of random points (cm^-3) = 1E8
+
+        # shape which defines the boundaries of the volume of interest where egs_brachy will search for inscribed source geometries
+        include file = lib/geometry/sources/Pd103_LDR/TheraSeed_200/boundary.shape
+    :stop source volume correction:
+
+:stop volume correction:
+
+#------------------------------------------------------------------------------------
+:start source definition:
+    :start source:
+        library = egs_isotropic_source
+        name = TheraSeed
+        charge = 0
+        include file = lib/geometry/sources/Pd103_LDR/TheraSeed_200/TheraSeed_200.shape
+
+        :start spectrum:
+            type = tabulated spectrum
+            spectrum file = lib/spectra/Pd103_NNDC_2.6_line.spectrum
+        :stop spectrum:
+    :stop source:
+
+    # the source transformations should usually be identical to the transformations used in autoenvelope
+    :start transformations:
+        include file = lib/geometry/transformations/100seeds_grid_5x7mmx4x7mmx5x8mm_0.5mm_perturb_in_z
+    :stop transformations:
+
+    simulation source = TheraSeed
+:stop source definition:
+
+
+#------------------------------------------------------------------------------------
+:start scoring options:
+    muen file = lib/muen/brachy_xcom_1.5MeV.muendat
+    muen for media = PROSTATE_WW86 # we score in prostate tissue, instead of water
+
+    score energy deposition = yes
+:stop scoring options:
+
+
+#------------------------------------------------------------------------------------
+:start variance reduction:
+    :start particle recycling:
+        times to reuse recycled particles = 1
+        rotate recycled particles = yes
+    :stop particle recycling:
+:stop variance reduction:
+
+
+#------------------------------------------------------------------------------------
+# Transport parameters
+include file = lib/transport/low_energy_default
+
+
+#:start ausgab object definition:
+#    :start ausgab object:
+#        library = egs_track_scoring
+#        score photons   = yes
+#        score electrons = no
+#        score positrons = no
+#    :stop ausgab object:
+#:stop ausgab object definition:
+
+
+
+## Results from TG-43 sim:
+# Tracklength avg dose: 1.857e-12 Gy/hist +/- 3.34%
+# E dep avg dose:       1.856e-12 Gy/hist +/- 10.98%
+#
+## Results from this file:
+# Tracklength avg dose: 1.786e-12 Gy/hist +/- 3.48%
+# E dep avg dose:       1.786e-12 Gy/hist +/- 11%
+# ---> smaller dose due to interseed attenuation
+#      (different media may also play a role...
+# 8% steps taken in sources, 84% in phantom --> due to p'cle recycling
+#
+### Efficiency comparison
+# uncertainties are similar but times differ:
+# TG-43: 12.5 s
+# realistic: 6.1 s --> ~2x as efficient as prev one
+
+
+

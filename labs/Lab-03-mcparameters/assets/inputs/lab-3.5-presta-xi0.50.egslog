@@ -1,0 +1,135 @@
+
+***************************************************
+*                                                 *
+*                     tutor6pp                    *
+*                                                 *
+***************************************************
+
+
+
+======================== geometry =====================
+ type = EGS_XYZGeometry
+ name = slab
+ number of regions = 3
+======================== geometry =====================
+ type = x-planes
+ name = geometry0
+ number of regions = 1
+ first plane at -5, 1 slices of 10 thickness
+=======================================================
+======================== geometry =====================
+ type = y-planes
+ name = geometry1
+ number of regions = 1
+ first plane at -5, 1 slices of 10 thickness
+=======================================================
+======================== geometry =====================
+ type = z-planes
+ name = geometry2
+ number of regions = 3
+ plane positions = -10 0 0.1 10 
+=======================================================
+=======================================================
+
+
+The simulation uses the following source:
+=========================================
+ Parallel beam from a shape of type point with monoenergetic 2 MeV, electrons
+
+
+Random number generator:
+============================================
+  type                = ranmar
+  high resolution     = no
+  initial seeds       = 58 354
+  numbers used so far = 54436736
+
+
+
+
+The following media are defined:
+================================
+
+  0  tantalum                 AE= 0.5120 AP= 0.0010 0
+
+
+Transport parameter and cross section options:
+==============================================
+Photon cross sections                             xcom            
+Compton cross sections                            default         
+Global Pcut                                       0.01
+Pair cross sections                               BH
+Pair angular sampling                             KM
+Triplet production                                Off
+Bound Compton scattering                          On
+Radiative Compton corrections                     Off
+Rayleigh scattering                               On
+Atomic relaxations                                On
+Photoelectron angular sampling                    On
+Photonuclear attenuation                          Off
+Photonuclear cross sections                       default         
+
+Global Ecut                                       0.521
+Brems cross sections                              NRC
+Brems angular sampling                            KM
+Spin effects                                      On
+Electron Impact Ionization                        Off             
+Global Smax                                       1e+10
+ESTEPE                                            0.25
+Ximax                                             0.5
+Boundary crossing algorithm                       PRESTA-I
+Skin depth for BCA                                5.0585
+Electron-step algorithm                           PRESTA-I
+==============================================
+
+
+                      Suming the following .egsdat files:
+=======================================================================
+ 1 lab-4.5-presta-xi0.50_w1.egsdat ncase=7470           cpu=3.96       
+ 2 lab-4.5-presta-xi0.50_w2.egsdat ncase=6640           cpu=3.52       
+ 3 lab-4.5-presta-xi0.50_w3.egsdat ncase=9130           cpu=4.85       
+ 4 lab-4.5-presta-xi0.50_w4.egsdat ncase=9960           cpu=5.02       
+ 5 lab-4.5-presta-xi0.50_w5.egsdat ncase=8300           cpu=4.44       
+ 6 lab-4.5-presta-xi0.50_w6.egsdat ncase=8300           cpu=4.34       
+ 7 lab-4.5-presta-xi0.50_w7.egsdat ncase=8300           cpu=4.17       
+ 8 lab-4.5-presta-xi0.50_w8.egsdat ncase=10790          cpu=5.45       
+ 9 lab-4.5-presta-xi0.50_w9.egsdat ncase=8340           cpu=4.39       
+10 lab-4.5-presta-xi0.50_w10.egsdat ncase=6640           cpu=3.52       
+11 lab-4.5-presta-xi0.50_w11.egsdat ncase=8300           cpu=4.27       
+12 lab-4.5-presta-xi0.50_w12.egsdat ncase=7470           cpu=3.98       
+=======================================================================
+                            Total ncase=99640          cpu=51.91      
+
+
+
+Finished simulation
+
+Total cpu time for this run:            0.01 (sec.) 0.0000(hours)
+CPU time including previous runs:       51.92 (sec.) 0.0144 (hours)
+Histories per hour:                     6.90878e+06   
+Number of random numbers used:          811832148     
+Number of electron CH steps:            0             
+Number of all electron steps:           6.29559e+07   
+
+
+  last case = 99640
+  Etot = 199280
+
+
+Energy fractions
+======================================================
+   Reflected:   0.252515 +/- 0.001059   (  0.419328 %)
+   Deposited:   0.720331 +/- 0.001053   (  0.146213 %)
+   Transmitted: 0.027154 +/- 0.000318   (  1.169345 %)
+
+
+Spectrum
+======================================================
+   spectrum scoring regions: 1 
+   energy fraction recorded in spectrum: 0.718043
+   spectrum data written to file lab-4.5-presta-xi0.50_response.dat
+
+
+
+End of run                                             Thu Aug 31 13:54:02 2017
+================================================================================

@@ -1,0 +1,248 @@
+###############################################################################
+#
+#  EGSnrc example setup
+#
+###############################################################################
+#
+#  Authors:         Reid Townson
+#
+#  Contributors:
+#
+###############################################################################
+#
+#  Input file for simulation of a setup for a window and methane project
+#
+#  This input file was prepared for the Monte Carlo NRC Course in 2024
+#
+#  This input file is compatible with egs_phd in EGSnrc.
+#
+###############################################################################
+
+
+###############################################################################
+### RUN CONTROL
+###############################################################################
+:start run control:
+    ncase = %(n_case)s # The number of histories to run
+    geometry error limit        = %(geom_error_limit)d
+    statistical accuracy sought = %(accuracy_sought)f
+    nbatch = %(n_batch)d
+:stop run control:
+
+:start rng definition:
+    initial seeds = %(seed_i)d %(seed_j)d # The initial random number seeds
+:stop rng definition:
+
+###############################################################################
+### GEOMETRY
+###############################################################################
+:start geometry definition:
+
+    # Container
+    :start geometry:
+        name = container
+        library = egs_cones
+        type = EGS_ConeStack
+
+        # Detector is positioned so that the top of the window
+        # is at the origin, and "down" is in the -z direction
+        axis = 0 0 0  0 0 -1
+
+        # Top layer
+        :start layer:
+            thickness       = %(windowThickness)f # We're going to loop over thickness
+
+            # TIP: It's good practice to have the last radius in this list constant for the whole conestack
+            top radii       = 5 10
+            bottom radii    = 5 10
+            media = %(windowMaterial)s lead # Loop over material
+        :stop layer:
+        # This is an extra layer just to create a 1cm thick region after entry
+        # This will allow us to look at the energy spectrum here
+        :start layer:
+            thickness       = 1
+            top radii       = 5 10
+            bottom radii    = 5 10
+            media = methane lead
+        :stop layer:
+        :start layer:
+            thickness       = 9
+            top radii       = 5 10
+            bottom radii    = 5 10
+            media = methane lead
+        :stop layer:
+        # Bottom of the container
+        :start layer:
+            thickness       = 5
+            top radii       = 10
+            bottom radii    = 10
+            media = lead
+        :stop layer:
+
+        # Labels for regions of interest
+        # These are local region numbers for this geometry
+        set label = methane-top 2
+        set label = methane-all 2 4
+    :stop geometry:
+
+    # Air box
+    :start geometry:
+        name = air_box
+        library = egs_box
+        box size = 30 30 60
+
+        :start media input:
+            media = air
+        :stop media input:
+    :stop geometry:
+
+
+    ###########################################################################
+    # Combining geometries
+    ###########################################################################
+
+    :start geometry:
+        name    = world
+        library = egs_genvelope
+        base geometry        = air_box
+        inscribed geometries = container
+    :stop geometry:
+
+    ###########################################################################
+    # Simulation geometry
+    ###########################################################################
+    simulation geometry = world
+
+:stop geometry definition:
+
+###############################################################################
+### MEDIA
+###############################################################################
+:start media definition:
+
+    # Cutoff energies
+    ae  = %(ae)f            # lowest  energy for electrons (kinetic+0.511)
+    ap  = %(ap)f            # lowest  energy for photons   (kinetic)
+    ue  = %(ue)f            # maximum energy for electrons (kinetic+0.511)
+    up  = %(up)f            # maximum energy for photons   (kinetic)
+
+    :start air:
+        density correction file = air_dry_nearsealevel
+    :stop air:
+
+    :start copper:
+        density correction file = copper
+    :stop copper:
+
+    :start aluminum:
+        density correction file = aluminum
+    :stop aluminum:
+
+    :start lead:
+        density correction file = lead
+    :stop lead:
+
+    :start methane:
+        density correction file = methane
+    :stop methane:
+
+:stop media definition:
+
+###############################################################################
+### SOURCE
+###############################################################################
+:start source definition:
+
+    :start source:
+        library = egs_parallel_beam
+        name = my_source
+        :start shape:
+            library = egs_circle
+            radius   = 0.05
+            :start transformation:
+                translation = 0 0 2
+            :stop transformation:
+        :stop shape:
+        direction = 0 0 -1
+        charge = -1
+        :start spectrum:
+            type = monoenergetic
+            energy = 0.1
+        :stop spectrum:
+    :stop source:
+
+    simulation source = my_source
+
+:stop source definition:
+
+
+###############################################################################
+### AUSGAB
+###############################################################################
+
+:start ausgab object definition:
+
+    # Score tracks
+    :start ausgab object:
+        name    = tracks
+        library = egs_track_scoring
+        stop scoring = 2000
+    :stop ausgab object:
+
+    # Score dose
+    :start ausgab object:
+        library      = egs_dose_scoring
+        name         = doseScoring
+        medium dose  = no   # no  (default)
+        region dose  = yes  # yes (default)
+
+        # Dose will be wrong, because I haven't input the correct volumes
+        volume       = 1    # in cm**3
+    :stop ausgab object:
+
+    # Score phase-space just after the window
+    :start ausgab object:
+        library                  = egs_phsp_scoring
+        name                     = %(phsp1_filename)s
+        output format            = EGSnrc
+        particle type            = charged
+        score mu                 = no
+        score multiple crossers  = no
+        output directory         = %(user_path)s # The current directory
+        from regions = 1
+        to regions = 3
+    :stop ausgab object:
+
+    # Score phase-space just before the back plate
+    :start ausgab object:
+        library                  = egs_phsp_scoring
+        name                     = %(phsp1_filename)s
+        output format            = EGSnrc
+        particle type            = charged
+        score mu                 = no
+        score multiple crossers  = no
+        output directory         = %(user_path)s # The current directory
+        from regions = 5
+        to regions = 7
+    :stop ausgab object:
+
+:stop ausgab object definition:
+
+
+###############################################################################
+### SCORING OPTIONS
+###############################################################################
+
+# For egs_phd
+:start scoring options:
+
+    :start spectrum:
+        label = methane-top
+        Emin  = 0.0
+        Emax  = 0.1
+        bins  = 200
+        spectrum file = %(spectrum_filename)s
+    :stop spectrum:
+
+:stop scoring options:
+

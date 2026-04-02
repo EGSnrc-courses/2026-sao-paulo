@@ -1,0 +1,135 @@
+
+***************************************************
+*                                                 *
+*                     tutor6pp                    *
+*                                                 *
+***************************************************
+
+
+
+======================== geometry =====================
+ type = EGS_XYZGeometry
+ name = slab
+ number of regions = 3
+======================== geometry =====================
+ type = x-planes
+ name = geometry0
+ number of regions = 1
+ first plane at -5, 1 slices of 10 thickness
+=======================================================
+======================== geometry =====================
+ type = y-planes
+ name = geometry1
+ number of regions = 1
+ first plane at -5, 1 slices of 10 thickness
+=======================================================
+======================== geometry =====================
+ type = z-planes
+ name = geometry2
+ number of regions = 3
+ plane positions = -10 0 0.1 10 
+=======================================================
+=======================================================
+
+
+The simulation uses the following source:
+=========================================
+ Parallel beam from a shape of type point with monoenergetic 2 MeV, electrons
+
+
+Random number generator:
+============================================
+  type                = ranmar
+  high resolution     = no
+  initial seeds       = 58 356
+  numbers used so far = 109296896
+
+
+
+
+The following media are defined:
+================================
+
+  0  tantalum                 AE= 0.5120 AP= 0.0010 0
+
+
+Transport parameter and cross section options:
+==============================================
+Photon cross sections                             xcom            
+Compton cross sections                            default         
+Global Pcut                                       0.01
+Pair cross sections                               BH
+Pair angular sampling                             KM
+Triplet production                                Off
+Bound Compton scattering                          On
+Radiative Compton corrections                     Off
+Rayleigh scattering                               On
+Atomic relaxations                                On
+Photoelectron angular sampling                    On
+Photonuclear attenuation                          Off
+Photonuclear cross sections                       default         
+
+Global Ecut                                       0.521
+Brems cross sections                              NRC
+Brems angular sampling                            KM
+Spin effects                                      On
+Electron Impact Ionization                        Off             
+Global Smax                                       1e+10
+ESTEPE                                            0.25
+Ximax                                             0.5
+Boundary crossing algorithm                       Exact
+Skin depth for BCA                                3
+Electron-step algorithm                           EGSnrc
+==============================================
+
+
+                      Suming the following .egsdat files:
+=======================================================================
+ 1 lab-4.4-spin-on_w1.egsdat      ncase=5810           cpu=4.01       
+ 2 lab-4.4-spin-on_w2.egsdat      ncase=6640           cpu=5.07       
+ 3 lab-4.4-spin-on_w3.egsdat      ncase=9130           cpu=6.19       
+ 4 lab-4.4-spin-on_w4.egsdat      ncase=9960           cpu=6.98       
+ 5 lab-4.4-spin-on_w5.egsdat      ncase=8300           cpu=6.10       
+ 6 lab-4.4-spin-on_w6.egsdat      ncase=7470           cpu=5.71       
+ 7 lab-4.4-spin-on_w7.egsdat      ncase=6640           cpu=5.11       
+ 8 lab-4.4-spin-on_w8.egsdat      ncase=9960           cpu=6.31       
+ 9 lab-4.4-spin-on_w9.egsdat      ncase=9130           cpu=6.24       
+10 lab-4.4-spin-on_w10.egsdat     ncase=9130           cpu=6.68       
+11 lab-4.4-spin-on_w11.egsdat     ncase=9170           cpu=6.78       
+12 lab-4.4-spin-on_w12.egsdat     ncase=8300           cpu=6.09       
+=======================================================================
+                            Total ncase=99640          cpu=71.27      
+
+
+
+Finished simulation
+
+Total cpu time for this run:            0.01 (sec.) 0.0000(hours)
+CPU time including previous runs:       71.28 (sec.) 0.0198 (hours)
+Histories per hour:                     5.03232e+06   
+Number of random numbers used:          1318099547    
+Number of electron CH steps:            3.59008e+07   
+Number of all electron steps:           9.91765e+07   
+
+
+  last case = 99640
+  Etot = 199280
+
+
+Energy fractions
+======================================================
+   Reflected:   0.258874 +/- 0.001070   (  0.413422 %)
+   Deposited:   0.714236 +/- 0.001065   (  0.149085 %)
+   Transmitted: 0.026891 +/- 0.000318   (  1.181853 %)
+
+
+Spectrum
+======================================================
+   spectrum scoring regions: 1 
+   energy fraction recorded in spectrum: 0.711954
+   spectrum data written to file lab-4.4-spin-on_response.dat
+
+
+
+End of run                                             Thu Aug 31 13:39:08 2017
+================================================================================

@@ -1,0 +1,53 @@
+##############################################################################
+### geometry
+##############################################################################
+:start geometry definition:
+
+
+    #-------------------------------------------------------------------------
+    # 3C graphite chamber
+    #-------------------------------------------------------------------------
+    :start geometry:
+        name    = 3C
+        library = egs_cones
+        type    = EGS_ConeStack
+        axis    = 0 0 -1.26275 0 0 1
+
+        :start layer:
+            thickness    = 0.456
+            top radii    = 1.175 4
+            bottom radii = 1.175 4
+            media        = graphite vacuum
+        :stop layer:
+
+        :start layer:
+            thickness    = 0.4133
+            top radii    = 0.7919 1.175 4
+            bottom radii = 0.7919 1.175 4
+            media        = air graphite vacuum
+        :stop layer:
+
+        :start layer:
+            thickness    = 1.2002
+            top radii    = 0.3352 0.7919 1.175 4
+            bottom radii = 0.3352 0.7919 1.175 4
+            media        = graphite air graphite vacuum
+        :stop layer:
+
+        :start layer:
+            thickness    = 0.456
+            top radii    = 1.175 4
+            bottom radii = 1.175 4
+            media        = graphite vacuum
+        :stop layer:
+
+    :stop geometry:
+    
+    
+    #-------------------------------------------------------------------------
+    # geometry to load in the viewer
+    #-------------------------------------------------------------------------
+    simulation geometry = 3C
+
+
+:stop geometry definition:
