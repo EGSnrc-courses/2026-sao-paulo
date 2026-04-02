@@ -369,6 +369,13 @@ communicate during the simulation. This is ideal for parallelization, and the
 simulation speed up is very nearly $\large n$. A simulation which takes 1 hour
 on a single thread will run in 5 minutes on 12 cores!
 
+If you want to run in parallel again and overwrite the files, you need to clean up first:
+
+```bash
+egs-parallel-clean -f 3c
+```
+
+
 ### Questions
 
 - How does the efficiency change when running your simulation on a single thread
