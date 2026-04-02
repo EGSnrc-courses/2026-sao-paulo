@@ -77,14 +77,14 @@
 > Typically, the uncertainty in a Monte Carlo simulation (a random sampling
 > process) decreases like $\large 1/\sqrt{N}$, with $\large N$ the number of independent
 > histories (samples). The 3C simulation example above shows that it took 27
-> seconds to run 10$^7$ histories to reach an uncertainty of 0.680 %. To reduce
+> seconds to run 10⁷ histories to reach an uncertainty of 0.680 %. To reduce
 > the uncertainty by a factor of 10 would require 100 times as many histories, ,
 > about 2700 seconds (45 minutes).
 
 ### What is the efficiency of this simulation ?
 
 > The efficiency $\large \epsilon = 1/(\sigma^2 t)$ provides a robust metric of
-> simulation *speed*—which is independent of the number of histories—by
+> simulation *speed* — which is independent of the number of histories — by
 > combining the simulation time $\large t$ and the attained statistical uncertainty
 > $\large \sigma$. The 3C simulation example above yields:
 >
@@ -165,7 +165,7 @@ in the `HEN_HOUSE/scripts/egs-parallel-cpu` script.
 >
 > Hence the dose to the cavity is now $\large 4.8845\times10^{-12} \pm
 > 0.735 \%$ Gy per incident particle. The efficiency has decreased to about
-> 300 $\text{s}^{-1}$. Simulations in denser materials are often less efficient: not
+> 300 s⁻¹. Simulations in denser materials are often less efficient: not
 > all the extra electrons generated contribute to dose.
 
 ### Is it different from the dose in a graphite chamber ?
@@ -177,7 +177,7 @@ the ionization chamber wall.
 
 > The ratio between the dose in the graphite chamber and the dose in the
 > aluminum chamber is $\large \mathbf{D_\text{\textbf{C}}/D_\text{\textbf{Al}} = 0.918
-> \pm 1\text{\%}}$. The difference from unity is statistically significant. If
+> \pm 1\text{\\%}}$. The difference from unity is statistically significant. If
 > dose is measured using an aluminum 3C chamber, the result has to be multiplied
 > by 0.918 before it is compared to a graphite chamber measurement.
 
@@ -215,12 +215,12 @@ the ionization chamber wall.
 
 > The dose to the cavity is **$\large \mathbf{4.3889\times10^{-12} \pm 0.689}$ % Gy**
 > per incident particle. The efficiency is now higher than in the graphite
-> chamber, at about 940 $\text{s}^{-1}$. The same statistical uncertainty was reached
+> chamber, at about 940 s⁻¹. The same statistical uncertainty was reached
 > in a shorter simulation time.
 >
 > The ratio between the dose in the graphite chamber and the dose in the pmma
 > chamber is $\large \mathbf{D_\text{\textbf{C}}/D_\text{\textbf{pmma}} = 1.02 \pm
-> 1\text{\%}}$. The statistical significance of the result here is less clear,
+> 1\text{\\%}}$. The statistical significance of the result here is less clear,
 > as we are within $\large 2\sigma$ of unity. It would be prudent to run longer
 > simulations to reduce the statistical uncertainty on the ratio, in order to
 > confirm the correction factor.

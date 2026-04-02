@@ -21,8 +21,12 @@
 - [13.6. Turn on the production of particle tracks](#136-turn-on-the-production-of-particle-tracks)
 - [13.7. Define the run control parameters](#137-define-the-run-control-parameters)
 - [13.8. Run the simulation](#138-run-the-simulation)
+  - [Questions](#questions)
 - [13.9. Run EGSnrc in parallel](#139-run-egsnrc-in-parallel)
+  - [Questions](#questions-1)
 - [13.10. Calculate a chamber correction factor](#1310-calculate-a-chamber-correction-factor)
+  - [Questions](#questions-2)
+  - [Solutions laboratory 13](#solutions-laboratory-13)
 
 
 ## 13.1. Introduction
@@ -74,9 +78,9 @@ the input file according to the following instructions to get it ready for an
    ```
 
 4. **Add an extra radius** of 4 cm in every layer, filled with the media
-   `vacuum` . This is just to help visualize particle tracks. The `vacuum`
-   medium is always defined in egs++. Note that you cannot change the colour of
-   `vacuum` : it is transparent. But notice how the new vacuum regions are
+   `vacuum`. This is just to help visualize particle tracks. The `vacuum`
+   medium is always defined in egs++. Note that you can change the colour of
+   `vacuum`: by default is it transparent. Notice how the new vacuum regions are
    numbered and show up in the region list in the viewer.
 
 5. **Determine the region numbers** of the geometry with `egs_view`, especially
@@ -159,7 +163,7 @@ below, and the corresponding rectangular field is illustrated in the figure
 below (a).
 
 Use the spectrum defined in the `co60.spectrum` file. You must provide the
-*full path* of the file, but you can used `$HEN_HOUSE` in your input file.
+*full path* of the file, but you can use `$HEN_HOUSE` in your input file.
 
 ```ruby
 :start source definition:
@@ -228,11 +232,11 @@ are only generated when a simulation runs.
 
 ## 13.4. Define the scoring options
 
-The scoring options specify what quantity to calculate, , dose to the air cavity
+The scoring options specify what quantity to calculate, dose to the air cavity
 in this particular case. In `egs_chamber`, the geometry specified in the
 scoring section **overrides** the simulation geometry specified in the geometry
 section. (This allows `egs_chamber` to transport particles through multiple
-geometries in a single simulation, , you can define multiple calculation
+geometries in a single simulation, you can define multiple calculation
 geometries.) Enter the following `scoring options` input block:
 
 ```ruby
@@ -313,7 +317,7 @@ particles travel through the geometry as expected; it should look like the image
 on the lab cover page.
 
 **Disable** the generation of particle tracks by commenting out the ausgab
-definition input block, and **increase** `ncase` to run 10$^7$ histories in
+definition input block, and **increase** `ncase` to run 10⁷ histories in
 order to reach an uncertainty below 1% on the value of dose to the air cavity.
 
 ```ruby
@@ -396,7 +400,7 @@ wall material difference comparing dose measurements.
 The idea is to run two simulations, one with the original graphite wall chamber,
 and another where you change the wall material everywhere to aluminum.
 
-Adjust the input file to change the 3C chamber wall material to aliminum (which
+Adjust the input file to change the 3C chamber wall material to aluminum (which
 has to be defined as a new medium), or better yet: define a second geometry in
 the same file with aluminum walls.
 
