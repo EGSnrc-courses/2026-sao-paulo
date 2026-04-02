@@ -97,7 +97,7 @@
 | `14:30` | 💬 `Lecture 28` | Validating simulations with the Fano test               | Frédéric   |
 | `15:00` | 💬 `Lecture 31` | FLURZnrc, SPRRZnrc and g                                | Ernesto    |
 | `16:00` | ☕ `Break`      |                                                         |            |
-| `16:30` | 🔬 `Lab 9`      | Build an ionization chamber model in egs++              | Frédéric   |
+| `16:30` | 🔬 `Lab 17`     | Model dynamic geometries and sources                    | Reid       |
 | `18:00` | 🛑              |                                                         |            |
 
 ## Friday — egs++ applications
