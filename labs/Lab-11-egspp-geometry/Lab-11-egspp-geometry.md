@@ -13,20 +13,10 @@
 
 - [11.1. Create a simple input file](#111-create-a-simple-input-file)
 - [11.2. Visualize your geometry with `egs_view`](#112-visualize-your-geometry-with-egs_view)
-  - [Question](#question)
 - [11.3. Dig in with clipping planes](#113-dig-in-with-clipping-planes)
-  - [Question](#question-1)
 - [11.4. Build an egs++ model of the 3C chamber](#114-build-an-egs-model-of-the-3c-chamber)
-  - [Questions](#questions)
 - [11.5. Build an egs++ model of an Exradin A12 chamber](#115-build-an-egs-model-of-an-exradin-a12-chamber)
-  - [Model the spherical chamber tip](#model-the-spherical-chamber-tip)
-  - [Model the chamber body](#model-the-chamber-body)
-  - [Join the chamber body to the chamber tip](#join-the-chamber-body-to-the-chamber-tip)
-  - [Questions](#questions-1)
-- [11.7. Compare with a chamber modelled with a mesh](#117-compare-with-a-chamber-modelled-with-a-mesh)
-  - [Questions](#questions-2)
-- [11.8 Use labels to reference regions](#118-use-labels-to-reference-regions)
-  - [Solutions laboratory 11](#solutions-laboratory-11)
+- [11.6. Compare with a chamber modelled with a mesh](#116-compare-with-a-chamber-modelled-with-a-mesh)
 
 ![cover](assets/cover.png)
 
@@ -289,9 +279,9 @@ regions?
 
 Download the [a12-mesh.egsinp](./assets/a12-mesh.egsinp) input file to your
 `$EGS_HOME/egs_app/` directory. Also download the
-[`a12-1.5M.msh-01.zip`](./assets/a12-1.5M.msh-01.zip)
+[`a12-1.5M.msh-01.zip`](https://github.com/user-attachments/files/17469105/a12-1.5M.msh-01.zip)
 and
-[a12-1.5M.msh-02.zip](./assets/a12-1.5M.msh-01.zip)
+[a12-1.5M.msh-02.zip](https://github.com/user-attachments/files/17469106/a12-1.5M.msh-02.zip)
 compressed mesh geometry file segments to `$EGS_HOME/egs_app/`. Go in your
 `egs_app` directory and recover the `a12-1.5M.msh` file with the commands:
 
