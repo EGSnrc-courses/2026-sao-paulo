@@ -279,15 +279,11 @@ regions?
 
 Download the [a12-mesh.egsinp](./assets/a12-mesh.egsinp) input file to your
 `$EGS_HOME/egs_app/` directory. Also download the
-[`a12-1.5M.msh-01.zip`](https://github.com/user-attachments/files/17469105/a12-1.5M.msh-01.zip)
-and
-[a12-1.5M.msh-02.zip](https://github.com/user-attachments/files/17469106/a12-1.5M.msh-02.zip)
-compressed mesh geometry file segments to `$EGS_HOME/egs_app/`. Go in your
+[a12-1.5M.zip](./assets/a12-1.5M.zip) zipped mesh to `$EGS_HOME/egs_app/`. Go in your
 `egs_app` directory and recover the `a12-1.5M.msh` file with the commands:
 
 ```bash
-cat a12-1.5M.msh-01.zip a12-1.5M.msh-02.zip > a12-1.5M.msh.zip
-unzip a12-1.5M.msh.zip
+unzip a12-1.5M.zip
 ```
 
 Launch and `egs_app` simulation using the `a12-mesh.egsinp` input file (it may
