@@ -101,8 +101,7 @@ Where `input_file_name` can be substituted with the actual name of your input fi
 input file for this purpose.
 
 2. Generate a 0° projection scatter-free (ideal) scan making use of the
-blank scan obtained in the previous step with the two different sources.
-Which source is more efficient?
+blank scan obtained in the previous step.
 
 ### Questions
 
