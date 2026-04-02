@@ -1,0 +1,15 @@
+:start geometry definition:
+
+    :start geometry:
+        name = mybox
+        library = egs_box
+        type = EGS_XYZgeometry
+        box size = 2.35 0.01 2.5256
+        :start media input:
+            media = med
+        :stop media input:
+    :stop geometry:
+    
+    simulation geometry = mybox
+    
+:stop geometry definition:

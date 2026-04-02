@@ -1,0 +1,267 @@
+##############################################################################
+### geometry
+##############################################################################
+:start geometry definition:
+
+
+    #-------------------------------------------------------------------------
+    # 3C graphite chamber
+    #-------------------------------------------------------------------------
+    :start geometry:
+        name    = 3C
+        library = egs_cones
+        type    = EGS_ConeStack
+        axis    = 0 0 -1.26275 0 0 1
+
+        :start layer:
+            thickness    = 0.456
+            top radii    = 1.175 4
+            bottom radii = 1.175 4
+            media        = graphite vacuum
+        :stop layer:
+
+        :start layer:
+            thickness    = 0.4133
+            top radii    = 0.7919 1.175 4
+            bottom radii = 0.7919 1.175 4
+            media        = air graphite vacuum
+        :stop layer:
+
+        :start layer:
+            thickness    = 1.2002
+            top radii    = 0.3352 0.7919 1.175 4
+            bottom radii = 0.3352 0.7919 1.175 4
+            media        = graphite air graphite vacuum
+        :stop layer:
+
+        :start layer:
+            thickness    = 0.456
+            top radii    = 1.175 4
+            bottom radii = 1.175 4
+            media        = graphite vacuum
+        :stop layer:
+
+    :stop geometry:
+
+
+    #-------------------------------------------------------------------------
+    # 3C aluminum chamber
+    #-------------------------------------------------------------------------
+    :start geometry:
+        name    = 3C_alu
+        library = egs_cones
+        type    = EGS_ConeStack
+        axis    = 0 0 -1.26275 0 0 1
+
+        :start layer:
+            thickness    = 0.456
+            top radii    = 1.175 4
+            bottom radii = 1.175 4
+            media        = aluminum vacuum
+        :stop layer:
+
+        :start layer:
+            thickness    = 0.4133
+            top radii    = 0.7919 1.175 4
+            bottom radii = 0.7919 1.175 4
+            media        = air aluminum vacuum
+        :stop layer:
+
+        :start layer:
+            thickness    = 1.2002
+            top radii    = 0.3352 0.7919 1.175 4
+            bottom radii = 0.3352 0.7919 1.175 4
+            media        = aluminum air aluminum vacuum
+        :stop layer:
+
+        :start layer:
+            thickness    = 0.456
+            top radii    = 1.175 4
+            bottom radii = 1.175 4
+            media        = aluminum vacuum
+        :stop layer:
+
+    :stop geometry:
+
+
+    #-------------------------------------------------------------------------
+    # 3C pmma chamber
+    #-------------------------------------------------------------------------
+    :start geometry:
+        name    = 3C_pmma
+        library = egs_cones
+        type    = EGS_ConeStack
+        axis    = 0 0 -1.26275 0 0 1
+
+        :start layer:
+            thickness    = 0.456
+            top radii    = 1.175 4
+            bottom radii = 1.175 4
+            media        = pmma vacuum
+        :stop layer:
+
+        :start layer:
+            thickness    = 0.4133
+            top radii    = 0.7919 1.175 4
+            bottom radii = 0.7919 1.175 4
+            media        = air pmma vacuum
+        :stop layer:
+
+        :start layer:
+            thickness    = 1.2002
+            top radii    = 0.3352 0.7919 1.175 4
+            bottom radii = 0.3352 0.7919 1.175 4
+            media        = pmma air pmma vacuum
+        :stop layer:
+
+        :start layer:
+            thickness    = 0.456
+            top radii    = 1.175 4
+            bottom radii = 1.175 4
+            media        = pmma vacuum
+        :stop layer:
+
+    :stop geometry:
+
+
+    #-------------------------------------------------------------------------
+    # geometry to load in the viewer
+    #-------------------------------------------------------------------------
+    simulation geometry = 3C
+
+
+:stop geometry definition:
+
+
+
+##############################################################################
+### media
+##############################################################################
+:start media definition:
+
+    ae = 0.521
+    ap = 0.010
+    ue = 2.511
+    up = 2
+
+    ### air
+    :start air:
+        density correction file = air_dry_nearsealevel
+    :stop air:
+
+    ### graphite
+    :start graphite:
+        density correction file = carbon_graphite_icru90_1.7g_cm3
+    :stop graphite:
+
+    ### aluminum
+    :start aluminum:
+        density correction file = aluminum
+    :stop aluminum:
+
+    ### pmma
+    :start pmma:
+        density correction file = polymethylmethacrylate__lucite___perspex___plexiglas_
+    :stop pmma:
+
+:stop media definition:
+
+
+
+##############################################################################
+### source
+##############################################################################
+:start source definition:
+
+    ### parallel beam source, along z
+    :start source:
+        name      = my_z_beam                   # a name
+        library   = egs_parallel_beam           # source library
+        direction = 0 0 1                       # +z direction
+        charge    = 0                           # use photons
+        :start shape:                           # shape of beam
+            library   = egs_rectangle           # shape library
+            rectangle = -1.175 -1.2628 1.175 1.2628
+        :stop shape:
+        :start spectrum:
+            type = tabulated spectrum           # load spectrum
+            spectrum file = /home/ftessier/courses/EGSnrc-course/HEN_HOUSE/spectra/egsnrc/co60.spectrum
+        :stop spectrum:
+    :stop source:
+
+    ### transformed beam, along y
+    :start source:
+        name        = my_y_beam                 # give a name
+        library     = egs_transformed_source    # load library
+        source name = my_z_beam                 # source to transform
+        :start transformation:
+            rotation    = 1.5708 0 0            # 90 degrees around x
+            translation = 0 -2 0                # move outside chamber
+        :stop transformation:
+    :stop source:
+
+    ### source to use in the simulation
+    simulation source = my_y_beam
+
+:stop source definition:
+
+
+
+##############################################################################
+### scoring
+##############################################################################
+:start scoring options:
+    :start calculation geometry:
+        geometry name   = 3C                    # name of geometry to run
+        cavity regions  = 4 9                   # all regions for air cavity
+        cavity mass     = 0.003319367245        # cavity mass in g/cm^3
+    :stop calculation geometry:
+:stop scoring options:
+
+
+
+##############################################################################
+### transport parameters
+##############################################################################
+:start MC transport parameter:
+    Global Ecut = 0.521                         # cutoff energy for electrons
+    Global Pcut = 0.01                          # cutoff energy for photons
+:stop MC transport parameter:
+
+
+
+##############################################################################
+### ausgab objects
+##############################################################################
+#:start ausgab object definition:
+    :start ausgab object:
+        name    = my_tracks                     # give it a name
+        library = egs_track_scoring             # load the proper library
+    :stop ausgab object:
+:stop ausgab object definition:
+
+
+
+##############################################################################
+### run control
+##############################################################################
+:start run control:
+    ncase = 1e7
+:stop run control:
+
+:start rng definition:
+    initial seeds = 193 45                      # any two numbers < 32768
+:stop rng definition:
+
+
+
+##############################################################################
+### view control
+##############################################################################
+:start view control:
+    set color = air         0   255 0   100
+    set color = graphite    100 100 200 255
+:stop view control:
+
+
+
