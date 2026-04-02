@@ -1,0 +1,233 @@
+################################################################################
+### Run control
+################################################################################
+:start run control:
+    ncase = 10000
+:stop run control:
+
+:start rng definition:
+    initial seeds = 1 2   # any two numbers less than 32768
+:stop rng definition:
+
+################################################################################
+### Media
+################################################################################
+:start media definition:
+
+ae  = 0.521
+ap  = 0.010
+ue  = 50.511
+up  = 50
+
+:start water:
+    density correction file = water_liquid
+:stop water:
+
+:start air:
+    density correction file = air_dry_nearsealevel
+:stop air:
+
+:start graphite:
+    density correction file = carbon_graphite_icru90_1.7g_cm3
+:stop graphite:
+
+:stop media definition:
+
+################################################################################
+### Geometry
+################################################################################
+:start geometry definition:
+
+    #---------------------------------------------------------------------------
+    # water phantom
+    #---------------------------------------------------------------------------
+    :start geometry:
+        name     = phantom
+        library  = egs_ndgeometry
+        type     = EGS_XYZGeometry
+        x-planes = -50, 50                    # in cm
+        y-planes = -50, 50                    # in cm
+        z-planes = -20, 10          	      # in cm
+        :start media input:
+            media = water
+            set medium = 0 0
+        :stop media input:
+    :stop geometry:
+
+    #---------------------------------------------------------------------------
+    # chamber
+    #---------------------------------------------------------------------------
+     :start geometry:
+         name    = 3C
+         library = egs_cones
+         type    = EGS_ConeStack
+         axis    = 0 -1.26275 0 0 1 0
+
+         :start layer:
+             thickness    = 0.456
+             top radii    = 1.175 4
+             bottom radii = 1.175 4
+             media = graphite water
+         :stop layer:
+
+         :start layer:
+             thickness    = 0.4133
+             top radii    = 0.7919 1.175 4
+             bottom radii = 0.7919 1.175 4
+             media = air graphite water
+         :stop layer:
+
+         :start layer:
+             thickness    = 1.2002
+             top radii    = 0.3352 0.7919 1.175 4
+             bottom radii = 0.3352 0.7919 1.175 4
+             media = graphite air graphite water
+         :stop layer:
+
+         :start layer:
+             thickness    = 0.456
+             top radii    = 1.175 4
+             bottom radii = 1.175 4
+             media = graphite water
+         :stop layer:
+
+     :stop geometry:
+
+    #---------------------------------------------------------------------------
+    # water chamber 
+    #---------------------------------------------------------------------------
+     :start geometry:
+         name    = water_3C
+         library = egs_cones
+         type    = EGS_ConeStack
+         axis    = 0 -1.26275 0 0 1 0
+
+         :start layer:
+             thickness    = 0.456
+             top radii    = 1.175 4
+             bottom radii = 1.175 4
+             media = water water
+         :stop layer:
+
+         :start layer:
+             thickness    = 0.4133
+             top radii    = 0.7919 1.175 4
+             bottom radii = 0.7919 1.175 4
+             media = water water water
+         :stop layer:
+
+         :start layer:
+             thickness    = 1.2002
+             top radii    = 0.3352 0.7919 1.175 4
+             bottom radii = 0.3352 0.7919 1.175 4
+             media = water water water water
+         :stop layer:
+
+         :start layer:
+             thickness    = 0.456
+             top radii    = 1.175 4
+             bottom radii = 1.175 4
+             media = water water
+         :stop layer:
+
+     :stop geometry:
+
+    #---------------------------------------------------------------------------
+    # cavities in the water phantom
+    #---------------------------------------------------------------------------
+     :start geometry:
+        name = chamber_in_water
+        library = egs_genvelope
+        base geometry = phantom
+        inscribed geometries = 3C
+      :stop geometry:
+     :start geometry:
+        name = water_in_water
+        library = egs_genvelope
+        base geometry = phantom
+        inscribed geometries = water_3C
+      :stop geometry:
+
+    #---------------------------------------------------------------------------
+    # simulation geometry
+    #---------------------------------------------------------------------------
+    simulation geometry = chamber_in_water
+
+
+:stop geometry definition:
+
+################################################################################
+### Source
+################################################################################
+:start source definition:
+
+    :start source:
+        name      = my_pencil_beam           # a name
+        library   = egs_parallel_beam   # source library
+        direction = 0 0 -1               # +z direction
+        charge    = 0                   # use photons
+	:start shape:
+            type = point
+    	    position = 0, 0, 0
+	:stop shape:
+        :start spectrum:
+            type = monoenergetic   # spectrum type
+            energy = 1.0
+        :stop spectrum:
+    :stop source:
+    :start source:
+        library = egs_transformed_source
+        name = my_source
+        source name = my_pencil_beam
+        :start transformation:
+	    translation = 0, 0, 10
+        :stop transformation:
+    :stop source:
+    simulation source = my_source
+
+:stop source definition:
+
+################################################################################
+### Scoring options
+################################################################################
+:start scoring options:
+
+      :start calculation geometry:
+        geometry name   = chamber_in_water      # name of geometry to run
+        cavity regions  = 5 10     # all regions for air cavity
+        cavity mass     = 0.003319339610993# write cavity mass in g here...
+      :stop calculation geometry:
+
+:stop scoring options:
+
+################################################################################
+### MC transport parameters
+################################################################################
+:start MC transport parameter:           
+    Global Ecut = 0.521
+    Global Pcut = 0.010 
+:stop MC transport parameter: 
+
+################################################################################
+### Ausgab objects
+################################################################################
+:start ausgab object definition:
+    :start ausgab object:
+        name    = my_tracks          # give it a name
+        library = egs_track_scoring  # load the proper library
+	start scoring   = 1
+	stop scoring = 5000
+        score photons   = yes
+	score electrons   = yes
+	score positrons   = yes
+    :stop ausgab object:
+:stop ausgab object definition:
+
+#===============================================================================
+### Viewer control
+#===============================================================================
+:start view control:
+    set color = graphite 120 120 200 150
+    set color = air      255 0 0 200
+    set color = water    0 0 255 50
+:stop view control: 

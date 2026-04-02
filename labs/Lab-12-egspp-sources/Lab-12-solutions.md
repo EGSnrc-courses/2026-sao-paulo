@@ -39,13 +39,13 @@ the number of particles emited, $\large N$ (`last case`):
 
 $$\large E_\text{dep} = \left(\frac{E_\text{dep}}{N}\right) \cdot N = 1.2082 \cdot 10^{-5}\ \text{MeV} \cdot 160072124 = 1933.991\ \text{MeV}$$
 
-Note above that 10$^5$ is the number of particles hitting the geometry !
+Note above that $10^5$ is the number of particles hitting the geometry !
 
 ### What is the solid angle, $\large \Omega$, subtended by the isotropic source and
 the front face of the geometry ?
 
 The number of particles emited by the isotropic point source in $\large 4\pi$ is
-160072124, while only 10$^5$ of these particles actually hit the front face of
+160072124, while only $10^5$ of these particles actually hit the front face of
 the cylinder. Hence $\large \Omega$ can be obtained from
 
 $$\large \Omega = \frac{10^5}{160072124}\cdot 4\pi = 0.00785\ \text{radians}$$

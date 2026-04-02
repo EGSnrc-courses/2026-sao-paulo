@@ -1,0 +1,272 @@
+In EGS_Application::initSimulation()
+================================================================================
+EGSnrc version 4 for x86_64-unknown-linux-gnu          Thu Aug 31 13:25:02 2017
+================================================================================
+configuration...................................................expect
+user code.......................................................tutor6pp
+pegs file.......................................................
+using host......................................................irs27
+input file......................................................lab-4.3-relax-on
+output file(s)..................................................lab-4.3-relax-on
+================================================================================
+
+***************************************************
+*                                                 *
+*                     tutor6pp                    *
+*                                                 *
+***************************************************
+
+In initCrossSections(): spin effects = 1
+Property Photon cross-sections output: 0
+Property Photonuclear attenuation: 0
+Property Bound Compton scattering: 1
+Property Radiative Compton corrections: 1
+Property Rayleigh scattering: 1
+Property Atomic relaxations: 1
+Property Photoelectron angular sampling: 1
+Property Spin effects: 1
+Property Triplet production: 0
+Property Brems cross sections: 2
+Property Brems angular sampling: 1
+Property Pair cross sections: 0
+Property Pair angular sampling: 2
+Property Electron-step algorithm: 0
+Property Boundary crossing algorithm: 0
+ ===> Photonuclear flag:   0
+ RAYLEIGH OPTION REQUESTED FOR MEDIUM NUMBER  1
+
+  PEGSLESS INPUT.  CALCULATING ELECTRON CROSS-SECTIONS.
+
+  Medium data: 
+
+ AE =    5.12000E-01 MeV,  UE =    5.05110E+01 MeV
+ AP =    1.00000E-03 MeV,  UP =    5.00000E+01 MeV
+
+  No material data file supplied.  Material data obtained from
+  .egsinp file or density correction file.
+
+   Medium: germanium               
+ Sterncid: germanium               
+     rho:    5.32300E+00 g/cm^3
+ Elements: GE  
+    rhoz:    1.00000E+00
+      pz:    1.37760E-02
+  iunrst:     0
+  iaprim:     0
+    gasp:    0.00000E+00 atm.
+  density correction file: /home/ftessier/courses/EGSnrc-course/HEN_HOUSE/pegs4/density_corrections/elements/germanium.density
+
+
+(Re)-initializing photon cross sections with files from the series: xcom
+
+ Compton cross sections: default
+ Using Compton cross sections from /home/ftessier/courses/EGSnrc-course/HEN_HOUSE/data/compton_sigma.data
+ Working on medium   1 ... 
+  ->  100 atomic ff values computed!
+      preparing data for Rayleigh sampling ... done
+
+OK
+
+Reading screened Rutherford MS data ...............  done 
+
+
+Reading spin data base from /home/ftessier/courses/EGSnrc-course/HEN_HOUSE/data/spinms.data
+EGSnrc spin data, version 2.0   
+Data generated on a machine with 1234 endianess
+The endianess of this CPU is 1234
+Ranges:      1.00   100.00  0.30054  1.00000
+
+
+  medium    1 .....................  done
+  
+  Medium            1  sige =    126.02336101961619        156.17689970057634       monotone =  F F
+  
+  Initializing tmxs for estepe =   0.25000000000000000       and ximax =   0.50000000000000000     
+  
+
+***************** Warning: 
+ You are trying to use radiative Compton corrections
+ without having included rad_compton1.mortran
+Turning radiative Compton corrections OFF ...
+
+
+
+Bound Compton scattering requested, reading data ......  Done
+
+ Initializing Bound Compton scattering ......
+ Medium   1 has  11 shells: 
+   1  196   1  0.06250 0.373E+01    11.103
+   2  197   2  0.06250 0.138E+02     1.414
+   3  198   3  0.06250 0.697E+01     1.248
+   4  199   4  0.12500 0.697E+01     1.217
+   5  200   5  0.06250 0.371E+02     0.181
+   6  201   6  0.06250 0.229E+02     0.129
+   7  202   7  0.12500 0.229E+02     0.122
+   8  203   8  0.12500 0.182E+02     0.029
+   9  204   9  0.18750 0.182E+02     0.029
+  10  205  10  0.06250 0.141E+03     0.008
+  11  206  11  0.06250 0.105E+03     0.008
+ ...... Done.
+
+Output from subroutine EDGSET:
+==============================
+ Atomic relaxations requested! 
+
+ Reading simplified photo-absorption data ..... Done
+
+ Reading simplified relaxation data ..... Done
+
+ Reading parametrized XCOM photo cross section data ..... Done
+
+ Reading EADL relaxation data ......
+  Z =  32 has 12 shells
+ ...... Done.
+
+  
+ Using NRC brems cross sections! 
+  
+  Initializing brems data for medium            1 ...
+  Max. new cross sections per energy loss:    126.36257198034482        156.37624254368336     
+  
+  
+ EGSnrc SUCCESSFULLY 'HATCHED' FOR ONE MEDIUM.
+
+
+The following media are defined:
+================================
+
+  0  germanium                AE= 0.5120 AP= 0.0010 0
+
+
+Transport parameter and cross section options:
+==============================================
+Photon cross sections                             xcom            
+Compton cross sections                            default         
+Global Pcut                                       0.001
+Pair cross sections                               BH
+Pair angular sampling                             KM
+Triplet production                                Off
+Bound Compton scattering                          On
+Radiative Compton corrections                     Off
+Rayleigh scattering                               On
+Atomic relaxations                                eadl
+Photoelectron angular sampling                    On
+Photonuclear attenuation                          Off
+Photonuclear cross sections                       default         
+
+Global Ecut                                       0.512
+Brems cross sections                              NRC
+Brems angular sampling                            KM
+Spin effects                                      On
+Electron Impact Ionization                        Off             
+Global Smax                                       1e+10
+ESTEPE                                            0.25
+Ximax                                             0.5
+Boundary crossing algorithm                       Exact
+Skin depth for BCA                                3
+Electron-step algorithm                           EGSnrc
+==============================================
+
+
+
+======================== geometry =====================
+ type = EGS_XYZGeometry
+ name = slab
+ number of regions = 3
+======================== geometry =====================
+ type = x-planes
+ name = geometry0
+ number of regions = 1
+ first plane at -5, 1 slices of 10 thickness
+=======================================================
+======================== geometry =====================
+ type = y-planes
+ name = geometry1
+ number of regions = 1
+ first plane at -5, 1 slices of 10 thickness
+=======================================================
+======================== geometry =====================
+ type = z-planes
+ name = geometry2
+ number of regions = 3
+ plane positions = -10 0 0.1 10 
+=======================================================
+=======================================================
+
+
+The simulation uses the following source:
+=========================================
+ Parallel beam from a shape of type point with monoenergetic 0.05 MeV, photons
+
+
+Random number generator:
+============================================
+  type                = ranmar
+  high resolution     = no
+  initial seeds       = 58 345
+  numbers used so far = 0
+
+
+
+
+Starting simulation on Thu Aug 31 13:25:03 2017
+
+    Fresh simulation of 100000 histories
+
+
+
+Running 100000 histories
+
+  Batch             CPU time        Result   Uncertainty(%)
+==========================================================
+      1                0.81              0         100.00
+      2                1.63              0         100.00
+      3                2.45              0         100.00
+      4                3.26              0         100.00
+      5                4.09              0         100.00
+      6                4.93              0         100.00
+      7                5.73              0         100.00
+      8                6.54              0         100.00
+      9                7.35              0         100.00
+     10                8.15              0         100.00
+
+
+Finished simulation
+
+Total cpu time for this run:            8.15 (sec.) 0.0023(hours)
+Histories per hour:                     4.41718e+07   
+Number of random numbers used:          166450741     
+Number of electron CH steps:            3.50584e+06   
+Number of all electron steps:           2.3658e+07    
+
+
+  last case = 100000
+  Etot = 5000
+
+
+Energy fractions
+======================================================
+   Reflected:   0.008069 +/- 0.000237   (  2.936945 %)
+   Deposited:   0.807089 +/- 0.001236   (  0.153174 %)
+   Transmitted: 0.184843 +/- 0.001226   (  0.663027 %)
+
+
+Spectrum
+======================================================
+   spectrum scoring regions: 1 
+   energy fraction recorded in spectrum: 0.803138
+   spectrum data written to file lab-4.3-relax-on_response.dat
+
+
+
+================================================================================
+Finished simulation
+
+  Elapsed time:                    9.5 s (  0.003 h)
+  CPU time:                        8.4 s (  0.002 h)
+  Ratio:                          1.125
+
+
+End of run                                             Thu Aug 31 13:25:11 2017
+================================================================================
+finishSimulation(tutor6pp) 0

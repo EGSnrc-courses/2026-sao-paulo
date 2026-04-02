@@ -1,0 +1,170 @@
+##############################################################################
+#
+# Simple slab simulation for tutor6pp
+#
+##############################################################################
+
+
+##############################################################################
+### RUN CONTROL
+#############################################################################
+:start run control:
+    ncase = 1e6
+:stop run control:
+
+:start rng definition:
+    initial seeds = 58 345
+:stop rng definition:
+
+
+##############################################################################
+### TRANSPORT PARAMETERS
+##############################################################################
+:start MC transport parameter:
+
+    Global ECUT                     = 0.521     # in MeV
+    Global PCUT                     = 0.010     # in MeV
+
+    ### physics
+    Photon cross sections           = xcom      # xcom | epdl | si
+    Atomic relaxations              = Off       # On  | Off
+    Spin effects                    = On        # On  | Off
+    Brems cross sections            = NRC       # NRC | NIST | KM
+    Brems angular sampling          = KM        # KM  | Simple
+    Pair angular sampling           = KM        # KM  | Off | Simple
+    Bound Compton scattering        = Off       # On  | Off | norej
+    Radiative Compton corrections   = On        # On  | Off
+    Photoelectron angular sampling  = On        # On  | Off
+    Rayleigh scattering             = On        # On  | Off | custom
+    Electron Impact Ionization      = Off       # On  | Off
+    Triplet production              = Off       # On  | Off
+    Photonuclear attenuation        = Off       # On  | Off
+
+    ### algorithm
+    Electron-step algorithm         = EGSnrc    # EGSnrc | PRESTA-I | PRESTA-II | default
+    Boundary crossing algorithm     = Exact     # Exact  | PRESTA-I
+    Skin depth for BCA              = 3
+    Ximax                           = 0.5
+    ESTEPE                          = 0.25
+    Global Smax                     = 1e10
+
+:stop MC transport parameter:
+
+
+##############################################################################
+### GEOMETRY
+##############################################################################
+:start geometry definition:
+
+    ### plate
+    :start geometry:
+        name     = slab
+        library  = egs_ndgeometry
+        type     = EGS_XYZGeometry
+        x-planes = -5, 5
+        y-planes = -5, 5
+        z-planes = -10, 0, 1, 10
+        :start media input:
+            media = vacuum germanium
+            set medium = 1 1
+        :stop media input:
+
+        set label = detector 1
+
+    :stop geometry:
+
+    ### use this geometry for the simulation
+    simulation geometry = slab
+
+:stop geometry definition:
+
+
+##############################################################################
+### MEDIA
+##############################################################################
+:start media definition:
+
+    ### cutoff energies
+    ae  = 0.512
+    ap  = 0.001
+    ue  = 50.511
+    up  = 50
+
+    ### lead
+    :start lead:
+        density correction file = lead
+    :stop lead:
+
+    ### germanium
+    :start germanium:
+        density correction file = germanium
+    :stop germanium:
+
+    ### tantalum
+    :start tantalum:
+        density correction file = tantalum
+    :stop tantalum:
+
+:stop media definition:
+
+
+##############################################################################
+### SOURCE
+##############################################################################
+:start source definition:
+
+    ### pencil beam
+    :start source:
+        name      = pencil_beam
+        library   = egs_parallel_beam
+        charge    = 0
+        direction = 0 0 1
+        :start spectrum:
+            type = monoenergetic
+            energy = 0.2
+        :stop spectrum:
+        :start shape:
+            type     = point
+            position = 0 0 -10
+        :stop shape:
+    :stop source:
+
+    ### use this source for the simulation
+    simulation source = pencil_beam
+
+:stop source definition:
+
+
+##############################################################################
+### SCORING OPTIONS
+##############################################################################
+:start scoring options:
+
+    ### score spectrum
+    :start spectrum:
+        label = detector        # region label where spectrum is scored
+    :stop spectrum:
+
+:stop scoring options:
+
+
+##############################################################################
+### VIEWER CONTROL
+##############################################################################
+:start view control:
+    set color = lead      120 120 200 255
+:stop view control:
+
+
+##############################################################################
+### AUSGAB OBJECTS
+##############################################################################
+:start ausgab object definition:
+
+#     ### particle tracks
+#     :start ausgab object:
+#         name    = tracks
+#         library = egs_track_scoring
+#     :stop ausgab object:
+
+:stop ausgab object definition:

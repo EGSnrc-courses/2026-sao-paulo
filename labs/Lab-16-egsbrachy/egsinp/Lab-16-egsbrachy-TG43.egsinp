@@ -1,0 +1,181 @@
+##############################################################################
+#
+# 100 LDR seeds in a phantom made of water
+# with no interseed effects to simulate TG-43-like conditions
+#
+##############################################################################
+
+#------------------------------------------------------------------------------------
+:start run control:
+    ncase = 2e6  
+:stop run control:
+
+
+#------------------------------------------------------------------------------------
+:start run mode:
+    run mode = superposition # no interseed effects, only 1 source geom active at any time; 
+                             # must be used with switched envelope
+:stop run mode:
+
+
+#------------------------------------------------------------------------------------
+:start media definition:
+    AE = 0.512
+    UE = 2.512
+    AP = 0.001
+    UP = 1.500
+
+    material data file = lib/media/material.dat
+:stop media definition:
+
+
+#------------------------------------------------------------------------------------
+:start geometry definition:
+
+    :start geometry:
+        name = box
+        library = egs_glib
+        include file = lib/geometry/phantoms/30cmx30cmx30cm_box_xyz_water.geom
+    :stop geometry:
+
+    :start geometry:
+        name = phantom
+        library = egs_glib
+        include file = lib/geometry/phantoms/ptv_3.4cmx2.8cmx3.8cm_2mm_xyz_water.geom
+    :stop geometry:
+
+    :start geometry:
+        name = seed
+        library = egs_glib
+        include file = lib/geometry/sources/Pd103_LDR/TheraSeed_200/TheraSeed_200.geom
+    :stop geometry:
+    # note that wrapped versions include cylinder slightly larger than the seed to prevent
+    # geom errors that may occur due to seed and voxel boundaries that overlap
+
+    # The egs_autoenvelope library allows for more efficient simulations with multiple 
+    # copies of the same source
+    :start geometry:
+        name = phantom_and_seeds
+        library = egs_autoenvelope
+        type = EGS_ASwitchedEnvelope # so only one source is modelled at a time; no interseed effects
+        base geometry = phantom      # typically the scoring phantom
+
+        :start inscribed geometry:
+            inscribed geometry name = seed # typically the source geometry
+
+            # it is recommended to define transformations (i.e., seed locations) in an external 
+            # file since the information needs to be repeated in the 'source' input block below
+            :start transformations:
+                include file = lib/geometry/transformations/100seeds_grid_5x7mmx4x7mmx5x8mm_0.5mm_perturb_in_z
+            :stop transformations:
+
+            # egs_autoenvelope automatically detects which voxels of the base geometry contain inscribed 
+            # geometries, which allows for faster transport
+            :start region discovery:
+                action = discover # Always use "discover" for eb, other options are for potential use in other codes.
+                                  # This is for detecting which voxels have sources, to speed up transport in voxel 
+                                  # where we will know there are no seeds based on this region discovery.
+                                  # Volume correction is handled later on in this input file
+                                  # Density of points here can be lower than that required for accurate volume 
+                                  # correction.
+                density of random points (cm^-3) = 1E8
+
+                # the shape which defines the boundaries of the volume of interest where egs_autoenvelope
+                # will search for inscribed geometries (i.e., should encompass one seed)
+                include file = lib/geometry/sources/Pd103_LDR/TheraSeed_200/boundary.shape
+            :stop region discovery:
+        :stop inscribed geometry:
+    :stop geometry:
+
+    # in general, egs_genvelope is more efficient than egs_gunion, thus composite geometries should 
+    # favour egs_genvelope where possible
+    :start geometry:
+        name = final
+        library = egs_genvelope
+        base geometry = box
+        inscribed geometries = phantom_and_seeds
+    :stop geometry:
+
+    source geometries = seed
+    phantom geometries = phantom
+    simulation geometry = final
+    source envelope geometry = phantom_and_seeds   # this is for the switched envelope
+                                                   # this line is deleted in the more realistic sim w/ regular envelope
+:stop geometry definition:
+
+
+#------------------------------------------------------------------------------------
+:start volume correction:
+
+    # the built-in egs_brachy volume correction for scoring voxels which contain inscribed source geometries
+    # i.e., it subtracts the volume of a seed/source from the phantom voxel it is in so that the dose is correct
+    :start source volume correction:
+        correction type = correct # other options are 'none' (use nominal volume) or 'zero dose', which sets 
+                                  # the dose to zero in voxels containing source geometries
+        density of random points (cm^-3) = 1E8
+
+        # shape is transformed to each of the locations specified for the sources
+        include file = lib/geometry/sources/Pd103_LDR/TheraSeed_200/boundary.shape
+    :stop source volume correction:
+
+:stop volume correction:
+
+#------------------------------------------------------------------------------------
+:start source definition:
+    :start source:
+        library = egs_isotropic_source
+        name = TheraSeed
+        charge = 0   # photons
+        include file = lib/geometry/sources/Pd103_LDR/TheraSeed_200/TheraSeed_200.shape
+
+        :start spectrum:
+            type = tabulated spectrum
+            spectrum file = lib/spectra/Pd103_NNDC_2.6_line.spectrum
+        :stop spectrum:
+    :stop source:
+
+    # the source transformations should usually be identical to the transformations used in autoenvelope
+    :start transformations:
+        include file = lib/geometry/transformations/100seeds_grid_5x7mmx4x7mmx5x8mm_0.5mm_perturb_in_z
+    :stop transformations:
+
+    simulation source = TheraSeed
+:stop source definition:
+
+
+#------------------------------------------------------------------------------------
+:start scoring options:
+    # muen data for tracklength estimator (scoring collision kerma)
+    muen file = lib/muen/brachy_xcom_1.5MeV.muendat
+    muen for media = WATER_0.998
+
+    score energy deposition = yes     # also use "interaction scoring" i.e., the full MC sim - although note high ECUT below
+:stop scoring options:
+
+
+#------------------------------------------------------------------------------------
+# Transport parameters
+# THE FOLLOWING FAILS FOR ME SO I PASTED FILE CONTENTS BELOW
+#include file = lib/transport/low_energy_default   # uses high ECUT suitable for low en sources
+                                                  # ...electron ranges are small c.f. voxel sizes
+
+## Default MC parameters for low energy sources; electron cutoff energy 1.5 MeV, photon cutoff energy 1 keV.
+:start MC transport parameter:
+    Global ECUT                    = 1.512
+    Global PCUT                    = 0.001
+    Source ECUT                    = 1.512
+    Source PCUT                    = 0.001
+    Fluorescent Photon Cutoff      = 0.001
+    Brems Cross Sections           = NRC
+    Rayleigh Scattering            = On
+    Electron Impact Ionization     = On
+:stop MC transport parameter:
+
+
+## Results
+# Tracklength avg dose: 1.857e-12 Gy/hist +/- 3.34%
+# E dep avg dose:       1.856e-12 Gy/hist +/- 10.98%
+# 52% steps taken in sources, 43% in phantom - significant time spent in source
+#                                              hence p'cle recycling is helpful
+
+

@@ -1,0 +1,11 @@
+y
+3
+-1,0,5
+200,0,.1
+0,0,0
+Lab-19-methane-phsp1.egsphsp1
+Lab-19-methane-energy-dist.txt
+1
+0
+0
+1

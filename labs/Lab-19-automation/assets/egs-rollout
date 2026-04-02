@@ -1,0 +1,252 @@
+#!/usr/bin/python
+
+# import relevant python modules
+import argparse
+import getopt
+import importlib
+import math
+import os
+import random
+import subprocess
+import sys
+import time
+import datetime
+
+# load parameters file as a python module
+egs_parameters = importlib.import_module(sys.argv[1])
+
+
+# =================================================================================================
+# main
+# =================================================================================================
+def main():
+
+    # print header
+    printHeader(sys.argv)
+
+    # initialize python random numnber generator, using pid and time
+    random.seed(int(os.getpid()*time.time()))
+
+    # load simulation parameters from external file
+    params = egs_parameters.set()
+
+    # parse command-line arguments
+    options = parseArguments(params, sys.argv[2:])
+
+    # initialize simulation instance, print parameters
+    sim = Sim(default=params, opt=options)
+    print(sim)
+
+    # generate input files
+    sim.writeInputFiles()
+
+    # print footer
+    printFooter()
+
+
+# =================================================================================================
+# simulation class
+# =================================================================================================
+class Sim(object):
+
+    # write EGSnrc input file from template
+    def writeEgsInput(self):
+
+        # compute other parameter variables
+        variables = vars(self)
+        variables = egs_parameters.compute(variables)
+
+        # user code random seeds
+        self.seed_i = random.randint(0,30000)
+        self.seed_j = random.randint(0,30000)
+
+        # open app input template
+        template_name = os.path.join(self.user_path, self.template) % variables
+        template      = open(template_name, "r")
+
+        # generate app input file
+        user_input  = (os.path.splitext(self.template)[0] + self.label) % variables
+        egsinp_name = (os.path.join(self.user_path, user_input) + ".egsinp") % variables
+
+        # replace placeholder keys in the template with corresponding variables
+        try:
+            content = template.read() % variables
+        except KeyError as err:
+            print("    Key ERROR: The key %s in %s is not defined\n" % (err, template_name))
+            sys.exit()
+
+        # write input file
+        if not self.dryrun:
+            egsinp = open(egsinp_name, "w")
+            egsinp.write (content)
+            egsinp.close()
+
+        # close template file
+        template.close()
+
+        # echo the generated input file name
+        print("   ", egsinp_name)
+
+
+    # generate all input files, recursively
+    def expandParameterLoops(self):
+
+        # dictionary of self parameters
+        options = vars(self)
+
+        # find the first key to expand
+        expand_key = None
+        for key, value in options.items():
+            if type(value) is list:
+                expand_key = key
+                break
+
+        # recurse to expand every list, or else write the input file
+        if expand_key != None:
+            for value in options[expand_key]:
+                param = {expand_key:value}
+                sub_sim = Sim(default=options, opt=param)
+                sub_sim.expandParameterLoops()
+        else:
+            self.writeEgsInput()
+
+    # expand variable loops
+    def writeInputFiles(self):
+
+        # dictionary of self parameters
+        options = vars(self)
+
+        # report looped variables and total number of simulations
+        print
+        print("### Parameter lists")
+        print
+        list_count = 0
+        simulation_count = 1
+        for key, value in options.items():
+            if type(value) is list:
+                list_count += 1
+                simulation_count *= len(value)
+                print("    %-20s= %s" % (key, value))
+        print("    %-20s= %s" % ("simulation count", simulation_count))
+
+        # generate all input files, recursively
+        print
+        print("### Input files")
+        print
+        if self.dryrun:
+            print("    DRY RUN: input files NOT generated")
+            print
+        self.expandParameterLoops()
+
+
+    # overload print method
+    def __str__(self):
+        output  = "\n"
+        output += "### Simulation parameters\n"
+        for key, value in sorted(vars(self).items()):
+            output += "\n    %-20s= %s" % (key, value)
+        return output
+
+    # init
+    def __init__(self, default=dict(), opt=dict()):
+
+        # set values to the defaults
+        for (key, value) in default.items():
+            setattr(self, key, value)
+
+        # override values with __init__ function keyword arguments
+        for key in default.keys():
+            if key in vars().keys():
+                setattr(self, key, vars()[key])
+
+        # override values with opt values
+        for (key, value) in opt.items():
+            if value != None:
+                setattr(self, key, value)
+
+
+# =================================================================================================
+# parseArguments
+# =================================================================================================
+def parseArguments(params, args):
+
+    # create parser
+    parser = argparse.ArgumentParser(description="Parses command line arguments")
+
+    # keys in params dict define command-line arguments
+    for key in sorted(params.keys()):
+        parser.add_argument("--" + key)
+
+    # add dry run option
+    parser.add_argument("-n", "--dryrun", action='store_true')
+
+    # parse command line
+    options = vars(parser.parse_args(args))
+
+    # convert argument values to correct type (handling comma-separated lists)
+    for key, value in options.items():
+        if isinstance(value, str):
+            tokens = value.split(',')
+
+            # get type of parameter for casting
+            try:
+                my_type = type(params[key][0])
+            except:
+                my_type = type(params[key])
+
+            # cast type
+            if (len(tokens) > 1):
+                options[key] = map(my_type, tokens)
+            else:
+                options[key] = my_type(value)
+
+    # return a dict of command-line arguments
+    return options
+
+
+# =================================================================================================
+# printHeader
+# =================================================================================================
+def printHeader(argv=sys.argv):
+
+    print
+    print(divider('-'))
+    print
+    print("##  EGSnrc script %s" % (argv[0]))
+    print
+    print("   ", " ".join(argv))
+    print
+    print(divider('-'))
+    print(timestamp())
+
+
+# =================================================================================================
+# printFooter
+# =================================================================================================
+def printFooter(argv=sys.argv):
+
+    print
+    print(divider())
+    print(timestamp())
+    print
+
+
+# =================================================================================================
+# timestamp
+# =================================================================================================
+def timestamp():
+    return str(datetime.datetime.utcnow()) + " UTC"
+
+
+# =================================================================================================
+# divider
+# =================================================================================================
+def divider(char='-'):
+    return char*80
+
+
+# =================================================================================================
+# call main
+# =================================================================================================
+if __name__ == "__main__":
+    main()
