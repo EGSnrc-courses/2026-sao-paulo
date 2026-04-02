@@ -29,7 +29,7 @@
 
 ## 19.1. Model the geometry
 
-Set up the geometry for a container of methane, as per your specifications. Start with a conestack near the origin, with a thin window. In this example, we used a copper window 0.001 cm thick and some approximated dimensions. The inner radius containing a gas is 5 cm, and the outer radius of the lead container is 10 cm (walls 5 cm thick).
+Set up the geometry for a container of methane. Start with a conestack near the origin, with a thin window. In this example, we used a copper window 0.001 cm thick and some approximated dimensions. The inner radius containing a gas is 5 cm, and the outer radius of the lead container is 10 cm (walls 5 cm thick).
 
 Save the .egsinp file in `$EGS_HOME/egs_phd`.
 
