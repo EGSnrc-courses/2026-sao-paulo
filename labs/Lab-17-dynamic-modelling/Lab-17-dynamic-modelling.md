@@ -166,14 +166,14 @@ whereas couch (i.e., patient) rotation will be modelled using
         :start motion:
             # control point = time(1) xtrans(1) ytrans(1) ztrans(1) xrot(1) yrot(1) zrot(1)
             # units of cm and degrees
-            control point 1 = 0.00 0 0 0 0 0 0
-            control point 2 = 0.25 0 0 0 0 0 0
-            control point 3 = 0.25 0 0 0 0 0 0
-            control point 4 = 0.50 0 0 0 0 0 0
-            control point 5 = 0.50 0 0 0 0 0 0
-            control point 6 = 0.75 0 0 0 0 0 0
-            control point 7 = 0.75 0 0 0 0 0 45      # rotation about the z-axis = couch kick!
-            control point 8 = 1.00 0 0 0 0 0 45
+            control point = 0.00 0 0 0 0 0 0
+            control point = 0.25 0 0 0 0 0 0
+            control point = 0.25 0 0 0 0 0 0
+            control point = 0.50 0 0 0 0 0 0
+            control point = 0.50 0 0 0 0 0 0
+            control point = 0.75 0 0 0 0 0 0
+            control point = 0.75 0 0 0 0 0 45      # rotation about the z-axis = couch kick!
+            control point = 1.00 0 0 0 0 0 45
         :stop motion:
     :stop geometry:
 ```
@@ -243,7 +243,7 @@ defined such that we get a $6\times6$ cm$^2$ square at isocentre. We will use a
         ### 6 MV spectrum
         :start spectrum:
             type = tabulated spectrum
-            spectrum file = /Users/patriciaoliver/EGSnrc/HEN_HOUSE/spectra/egsnrc/mohan6.spectrum
+            spectrum file = $HEN_HOUSE/spectra/egsnrc/mohan6.spectrum
         :stop spectrum:
     :stop source:
 ```
@@ -260,8 +260,8 @@ another source within your source definition block:
         synchronize motion = yes           # sync with geometry!
         :start motion:
             # beam centred on tumour, which is at isocentre:
-            control point 1 = 0 0 0 0 0 0 0 0.0
-            control point 2 = 0 0 0 0 0 0 0 0.25
+            control point = 0 0 0 0 0 0 0 0.0
+            control point = 0 0 0 0 0 0 0 0.25
             etc...
             # Note: same number of CPs as egs_dynamic_geometry, also same time points
                     # --> necessary for synchronization
