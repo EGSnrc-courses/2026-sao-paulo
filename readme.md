@@ -2,6 +2,7 @@
 
 This is a live repository providing the EGSnrc course content: schedule, lectures and labs.
 
+- 📝 [Feedback](https://tinyurl.com/EGSnrc-course-feedback)
 - 💬 [Lectures](./lectures/)
 - 🔬 [Labs](./labs/)
 - 📆 [Schedule](./schedule/)
